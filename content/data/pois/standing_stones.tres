@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="PoiDef" format=3]
+
+[ext_resource type="Script" path="res://content/poi_actions/poi_action.gd" id="1_83li0"]
+[ext_resource type="Script" path="res://content/poi_actions/show_message_action.gd" id="2_yk6tj"]
+[ext_resource type="Script" path="res://content/defs/item_def.gd" id="3_lsx15"]
+[ext_resource type="Resource" path="res://content/data/items/ether.tres" id="4_87wi7"]
+[ext_resource type="Script" path="res://content/poi_actions/give_items_action.gd" id="5_4gtem"]
+[ext_resource type="Script" path="res://content/conditions/condition.gd" id="6_jis8k"]
+[ext_resource type="Script" path="res://content/conditions/flag_condition.gd" id="7_m0475"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/poi/stones.png" id="8_jvdb6"]
+[ext_resource type="Script" path="res://content/defs/poi_def.gd" id="9_7cnao"]
+
+[sub_resource type="Resource" id="Resource_g4bn5"]
+script = ExtResource("2_yk6tj")
+text = "The stones hum in answer to the shrine's blessing. Something glints in the grass."
+
+[sub_resource type="Resource" id="Resource_p32hj"]
+script = ExtResource("5_4gtem")
+items = Dictionary[ExtResource("3_lsx15"), int]({
+ExtResource("4_87wi7"): 1
+})
+
+[sub_resource type="Resource" id="Resource_nmtqq"]
+script = ExtResource("7_m0475")
+flag = &"shrine_blessing"
+
+[resource]
+script = ExtResource("9_7cnao")
+once = true
+conditions = Array[ExtResource("6_jis8k")]([SubResource("Resource_nmtqq")])
+unavailable_text = "The stones are silent. Perhaps they answer to someone the shrine has blessed."
+actions = Array[ExtResource("1_83li0")]([SubResource("Resource_g4bn5"), SubResource("Resource_p32hj")])
+id = &"standing_stones"
+display_name = "Standing Stones"
+description = "Three tall stones in a ring."
+icon = ExtResource("8_jvdb6")

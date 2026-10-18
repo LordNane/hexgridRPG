@@ -1,0 +1,9 @@
+# Godot 4+ cache (imported assets, class cache, editor state)
+.godot/
+/android/
+
+# Export output
+/build/
+
+# Temporary settings written by tools/lint.ps1
+/override.cfg

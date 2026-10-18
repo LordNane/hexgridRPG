@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/item_def.gd" id="1_m16dp"]
+
+[resource]
+script = ExtResource("1_m16dp")
+id = &"antidote"
+display_name = "Antidote"
+description = "Cures poison."

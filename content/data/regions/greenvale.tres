@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RegionDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/region_def.gd" id="1_uetrr"]
+
+[resource]
+script = ExtResource("1_uetrr")
+id = &"greenvale"
+display_name = "Greenvale"
+description = "Rolling farmland along the old roads."

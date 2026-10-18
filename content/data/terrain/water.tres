@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TerrainDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/terrain_def.gd" id="1_6pxqr"]
+
+[resource]
+script = ExtResource("1_6pxqr")
+passable = false
+id = &"water"
+display_name = "Water"

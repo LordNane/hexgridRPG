@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FeatureDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/feature_def.gd" id="1_pwl4m"]
+
+[resource]
+script = ExtResource("1_pwl4m")
+extra_move_cost = 1.0
+blocks_sight = true
+id = &"forest"
+display_name = "Forest"

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RegionDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/region_def.gd" id="1_jdw7t"]
+
+[resource]
+script = ExtResource("1_jdw7t")
+id = &"frost_reach"
+display_name = "The Frost Reach"
+description = "Cold highlands below the northern peaks."

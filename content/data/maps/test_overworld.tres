@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/map_def.gd" id="1_6doae"]
+
+[resource]
+script = ExtResource("1_6doae")
+scene = "res://explore/maps/test_overworld.tscn"
+id = &"test_overworld"
+display_name = "Test Overworld"
+description = "A small overworld for trying out exploration."

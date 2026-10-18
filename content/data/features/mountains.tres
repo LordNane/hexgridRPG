@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FeatureDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/feature_def.gd" id="1_ovuai"]
+
+[resource]
+script = ExtResource("1_ovuai")
+blocks_movement = true
+blocks_sight = true
+id = &"mountains"
+display_name = "Mountains"

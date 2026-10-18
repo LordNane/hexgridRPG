@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dsleltomd40qf"]
+
+[ext_resource type="Script" uid="uid://ywtut6ucvnso" path="res://tools/playgrounds/hex_playground.gd" id="1_playground"]
+
+[node name="HexPlayground" type="Node2D" unique_id=242336344]
+script = ExtResource("1_playground")
+
+[node name="Hud" type="CanvasLayer" parent="." unique_id=1291188581]
+
+[node name="Info" type="Label" parent="Hud" unique_id=374304757]
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 636.0
+offset_bottom = 30.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 10
