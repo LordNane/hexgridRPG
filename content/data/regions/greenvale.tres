@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="RegionDef" format=3]
 
+[ext_resource type="Resource" path="res://content/data/encounters/greenvale_encounters.tres" id="1_b1r7a"]
 [ext_resource type="Script" path="res://content/defs/region_def.gd" id="1_uetrr"]
 
 [resource]
 script = ExtResource("1_uetrr")
+encounters = ExtResource("1_b1r7a")
 id = &"greenvale"
 display_name = "Greenvale"
 description = "Rolling farmland along the old roads."

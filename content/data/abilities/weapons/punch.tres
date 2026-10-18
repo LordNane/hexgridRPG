@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://content/effects/effect.gd" id="1_2hbiy"]
+[ext_resource type="Script" path="res://content/effects/damage_effect.gd" id="2_asej6"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_4cato"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="4_8cgc3"]
+[ext_resource type="Script" path="res://content/defs/targeting_def.gd" id="5_32acl"]
+
+[sub_resource type="Resource" id="Resource_4170p"]
+script = ExtResource("2_asej6")
+power = 0.8
+
+[sub_resource type="Resource" id="Resource_s66md"]
+script = ExtResource("5_32acl")
+vertical_reach = 2
+
+[resource]
+script = ExtResource("4_8cgc3")
+targeting = SubResource("Resource_s66md")
+effects = Array[ExtResource("1_2hbiy")]([SubResource("Resource_4170p")])
+id = &"punch"
+display_name = "Punch"
+description = "Strike a foe next to you bare-handed."

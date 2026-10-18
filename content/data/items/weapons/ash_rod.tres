@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/attack.tres" id="1_2vcew"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/ash_rod.png" id="2_im8y1"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_kvb2l"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_lslc6"]
+
+[sub_resource type="Resource" id="Resource_a0t3v"]
+script = ExtResource("3_kvb2l")
+stat = 4
+value = 3.0
+
+[resource]
+script = ExtResource("4_lslc6")
+attack = ExtResource("1_2vcew")
+slot = 0
+equip_tag = &"rod"
+modifiers = Array[ExtResource("3_kvb2l")]([SubResource("Resource_a0t3v")])
+price = 120
+id = &"ash_rod"
+display_name = "Ash Rod"
+description = "A rod that sharpens black magic."
+icon = ExtResource("2_im8y1")

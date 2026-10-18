@@ -1,0 +1,118 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/placeholder/pixel_font.fnt" id="1_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_window"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.078, 0.105, 0.141, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.75, 0.45, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inset"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 4.0
+bg_color = Color(0.106, 0.141, 0.188, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.239, 0.29, 0.361, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_focus"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(0.85, 0.75, 0.45, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.75, 0.45, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+content_margin_left = 4.0
+content_margin_top = 1.0
+content_margin_right = 4.0
+content_margin_bottom = 1.0
+bg_color = Color(0.85, 0.75, 0.45, 0.32)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_separator"]
+color = Color(0.239, 0.29, 0.361, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scroll"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(0.106, 0.141, 0.188, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grabber"]
+content_margin_left = 2.0
+content_margin_right = 2.0
+bg_color = Color(0.85, 0.75, 0.45, 0.6)
+anti_aliasing = false
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 8
+Button/colors/font_color = Color(0.878, 0.898, 0.922, 1)
+Button/colors/font_disabled_color = Color(0.45, 0.48, 0.52, 1)
+Button/colors/font_focus_color = Color(1, 0.953, 0.78, 1)
+Button/colors/font_hover_color = Color(1, 0.953, 0.78, 1)
+Button/colors/font_hover_pressed_color = Color(1, 0.953, 0.78, 1)
+Button/colors/font_pressed_color = Color(1, 0.953, 0.78, 1)
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 16
+Button/styles/disabled = SubResource("StyleBoxEmpty_button")
+Button/styles/focus = SubResource("StyleBoxFlat_button_focus")
+Button/styles/hover = SubResource("StyleBoxEmpty_button")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_button_pressed")
+Button/styles/normal = SubResource("StyleBoxEmpty_button")
+Button/styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+DimButton/base_type = &"Button"
+DimButton/colors/font_color = Color(0.5, 0.53, 0.58, 1)
+DimButton/colors/font_focus_color = Color(0.62, 0.64, 0.68, 1)
+DimButton/colors/font_hover_color = Color(0.62, 0.64, 0.68, 1)
+DimButton/colors/font_hover_pressed_color = Color(0.62, 0.64, 0.68, 1)
+DimButton/colors/font_pressed_color = Color(0.62, 0.64, 0.68, 1)
+DimLabel/base_type = &"Label"
+DimLabel/colors/font_color = Color(0.6, 0.64, 0.7, 1)
+DownLabel/base_type = &"Label"
+DownLabel/colors/font_color = Color(1, 0.5, 0.42, 1)
+HSeparator/constants/separation = 5
+HSeparator/styles/separator = SubResource("StyleBoxLine_separator")
+HeaderLabel/base_type = &"Label"
+HeaderLabel/colors/font_color = Color(0.95, 0.86, 0.58, 1)
+HeaderLabel/font_sizes/font_size = 16
+InsetPanel/base_type = &"PanelContainer"
+InsetPanel/styles/panel = SubResource("StyleBoxFlat_inset")
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.85)
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_window")
+UpLabel/base_type = &"Label"
+UpLabel/colors/font_color = Color(0.56, 0.9, 0.5, 1)
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_grabber")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_scroll")
+WarningLabel/base_type = &"Label"
+WarningLabel/colors/font_color = Color(1, 0.62, 0.45, 1)

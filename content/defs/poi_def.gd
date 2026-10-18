@@ -29,6 +29,9 @@ func validate() -> PackedStringArray:
 		problems.append("has no actions")
 	if actions.has(null) or conditions.has(null):
 		problems.append("has an empty action or condition slot")
+	for action: PoiAction in actions:
+		if action:
+			problems.append_array(action.validate())
 	if blocks_movement and trigger == Trigger.ON_ENTER:
 		problems.append("blocks movement, so nobody can step onto it to trigger it")
 	return problems

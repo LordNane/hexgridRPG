@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="JobDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="1_78x4x"]
+[ext_resource type="Resource" path="res://content/data/abilities/archer/aimed_shot.tres" id="2_2yq5a"]
+[ext_resource type="Resource" path="res://content/data/abilities/archer/attack_up.tres" id="3_qhn0u"]
+[ext_resource type="Resource" path="res://content/data/abilities/archer/jump_plus_1.tres" id="4_o28xj"]
+[ext_resource type="Script" path="res://content/defs/job_def.gd" id="5_egog7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/jobs/archer.png" id="6_yqfam"]
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/punch.tres" id="7_2yq5a"]
+[ext_resource type="Script" path="res://content/conditions/condition.gd" id="7_b35ch"]
+
+[resource]
+script = ExtResource("5_egog7")
+command_name = "Aim"
+stat_multipliers = Dictionary[int, int]({
+0: 100,
+1: 70,
+2: 105,
+3: 90,
+4: 80,
+5: 90,
+6: 105
+})
+stat_growth = Dictionary[int, float]({
+0: 3.5,
+1: 0.5,
+2: 0.6,
+3: 0.4,
+4: 0.2,
+5: 0.3,
+6: 0.15
+})
+move = 3
+jump = 4
+evasion = 10
+equip_tags = Array[StringName]([&"bow", &"knife", &"hat", &"armor"])
+unarmed_attack = ExtResource("7_2yq5a")
+abilities = Dictionary[ExtResource("1_78x4x"), int]({
+ExtResource("2_2yq5a"): 100,
+ExtResource("3_qhn0u"): 300,
+ExtResource("4_o28xj"): 250
+})
+sprite = ExtResource("6_yqfam")
+id = &"archer"
+display_name = "Archer"
+description = "Strikes from afar with a bow, and hits hardest from high ground."

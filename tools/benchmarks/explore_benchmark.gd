@@ -39,7 +39,7 @@ func _measure_loading() -> void:
 
 	var west := Hex.from_offset(Vector2i(2, MAP_SIZE.y / 2))
 	var east := Hex.from_offset(Vector2i(MAP_SIZE.x - 3, MAP_SIZE.y / 2))
-	var exploration := Exploration.new(GameSession.new(), map, west, false)
+	var exploration := Exploration.new(GameSession.new(), map, MapPosition.new(map.id, west), false)
 	started = Time.get_ticks_usec()
 	var route := exploration.route_to(east)
 	_report("route across the whole map (%d hexes)" % route.size(), started)
@@ -49,15 +49,14 @@ func _measure_loading() -> void:
 	route = exploration.route_to(screen_away)
 	_report("route across one screen (%d hexes)" % route.size(), started)
 
-	var mode := (load("res://explore/view/explore_mode.tscn") as PackedScene).instantiate()
-	mode.set("map_id", &"")
-	root.add_child(mode)
-	mode.set_process_unhandled_input(false)
 	var map_def := MapDef.new()
 	map_def.id = &"benchmark"
 	map_def.display_name = "Benchmark"
+	var explore_mode: GDScript = load("res://explore/view/explore_mode.gd")
+	var mode: Node = explore_mode.call("arriving", GameSession.new(), map_def, &"start", scene)
+	mode.set_process_unhandled_input(false)
 	started = Time.get_ticks_usec()
-	mode.call("explore", map_def, scene, &"start")
+	root.add_child(mode)
 	_report("open it in ExploreMode with fog of war", started)
 
 	if DisplayServer.get_name() == "headless":

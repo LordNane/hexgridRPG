@@ -43,6 +43,13 @@ func test_validator_reports_each_defs_own_problems() -> void:
 	assert_string_contains(problems[0], "void.tres: move_cost must be positive")
 
 
+func test_validator_reports_problems_in_poi_actions() -> void:
+	_registry.add(FakeContent.poi(&"door", [EnterMapAction.new()]), "door.tres")
+	var problems := ContentValidator.validate(_registry)
+	assert_eq(problems.size(), 1)
+	assert_string_contains(problems[0], "door.tres: an EnterMapAction has no map")
+
+
 func test_validator_finds_references_to_unregistered_content() -> void:
 	var potion := FakeContent.item(&"potion")
 	var chest := FakeContent.poi(&"chest", [FakeContent.give(potion, 2)])

@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="JobDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="1_hxqmb"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/focus.tres" id="2_8hrqw"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/throw_stone.tres" id="3_lwg1x"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/counter.tres" id="4_fmew0"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/equip_swords.tres" id="5_k403g"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/move_plus_1.tres" id="6_c1uao"]
+[ext_resource type="Script" path="res://content/defs/job_def.gd" id="7_88q4v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/jobs/squire.png" id="8_xxa8n"]
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/punch.tres" id="9_8hrqw"]
+[ext_resource type="Script" path="res://content/conditions/condition.gd" id="9_mr7s4"]
+
+[resource]
+script = ExtResource("7_88q4v")
+command_name = "Fundaments"
+stat_multipliers = Dictionary[int, int]({
+0: 110,
+1: 70,
+2: 110,
+3: 110,
+4: 80,
+5: 90,
+6: 100
+})
+stat_growth = Dictionary[int, float]({
+0: 4.0,
+1: 0.5,
+2: 0.6,
+3: 0.5,
+4: 0.2,
+5: 0.3,
+6: 0.1
+})
+equip_tags = Array[StringName]([&"sword", &"knife", &"shield", &"hat", &"armor"])
+unarmed_attack = ExtResource("9_8hrqw")
+abilities = Dictionary[ExtResource("1_hxqmb"), int]({
+ExtResource("2_8hrqw"): 50,
+ExtResource("3_lwg1x"): 90,
+ExtResource("4_fmew0"): 200,
+ExtResource("5_k403g"): 250,
+ExtResource("6_c1uao"): 300
+})
+sprite = ExtResource("8_xxa8n")
+id = &"squire"
+display_name = "Squire"
+description = "A soldier in training, at home with sword and shield. Sturdy, and quick to pick up the basics."

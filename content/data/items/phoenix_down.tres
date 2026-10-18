@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ConsumableDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/items/use_phoenix_down.tres" id="1_stycr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/phoenix_down.png" id="2_e7dkp"]
+[ext_resource type="Script" path="res://content/defs/consumable_def.gd" id="3_k1140"]
+
+[resource]
+script = ExtResource("3_k1140")
+ability = ExtResource("1_stycr")
+price = 300
+id = &"phoenix_down"
+display_name = "Phoenix Down"
+description = "A red feather that brings the fallen back."
+icon = ExtResource("2_e7dkp")

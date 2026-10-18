@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/attack.tres" id="1_o0i2w"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/iron_sword.png" id="2_h8m41"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_ybgby"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_pc667"]
+
+[sub_resource type="Resource" id="Resource_6y7bc"]
+script = ExtResource("3_ybgby")
+value = 5.0
+
+[resource]
+script = ExtResource("4_pc667")
+attack = ExtResource("1_o0i2w")
+slot = 0
+equip_tag = &"sword"
+modifiers = Array[ExtResource("3_ybgby")]([SubResource("Resource_6y7bc")])
+price = 250
+id = &"iron_sword"
+display_name = "Iron Sword"
+description = "A sturdy blade of good iron."
+icon = ExtResource("2_h8m41")

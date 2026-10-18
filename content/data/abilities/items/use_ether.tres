@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_ou483"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_fffgg"]
+
+[resource]
+script = ExtResource("2_fffgg")
+id = &"use_ether"
+display_name = "Ether"
+description = "Restores a little MP to one ally."

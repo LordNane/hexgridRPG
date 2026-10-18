@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_0tssu"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_5sw5v"]
+
+[resource]
+script = ExtResource("2_5sw5v")
+mp_cost = 6
+id = &"thunder"
+display_name = "Thunder"
+description = "Strike a foe with lightning from above."

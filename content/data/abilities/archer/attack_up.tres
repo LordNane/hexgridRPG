@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_33bq5"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_2gsie"]
+
+[sub_resource type="Resource" id="Resource_kwv8k"]
+script = ExtResource("1_33bq5")
+kind = 1
+value = 20.0
+
+[resource]
+script = ExtResource("2_2gsie")
+kind = 2
+modifiers = Array[ExtResource("1_33bq5")]([SubResource("Resource_kwv8k")])
+id = &"attack_up"
+display_name = "Attack Up"
+description = "Raises Attack by a fifth."

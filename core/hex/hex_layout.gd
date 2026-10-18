@@ -1,3 +1,4 @@
+@tool
 class_name HexLayout extends Resource
 ## Where hexes appear on screen: converts between hexes and pixels for flat-top hexes, squashed
 ## vertically for the game's 3/4 view.

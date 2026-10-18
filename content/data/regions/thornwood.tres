@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="RegionDef" format=3]
 
+[ext_resource type="Resource" path="res://content/data/encounters/greenvale_encounters.tres" id="1_3cyrn"]
 [ext_resource type="Script" path="res://content/defs/region_def.gd" id="1_yfwh7"]
 
 [resource]
 script = ExtResource("1_yfwh7")
+encounters = ExtResource("1_3cyrn")
 id = &"thornwood"
 display_name = "Thornwood"
 description = "A tangled forest whose paths close behind you."

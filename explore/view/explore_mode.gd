@@ -1,9 +1,13 @@
 class_name ExploreMode extends Node2D
 ## Plays an exploration map: loads its scene, builds its rules (an Exploration) and turns clicks
-## and keys into walks and POI visits. The rules decide; this node animates and presents.
+## and keys into walks and POI visits. The rules decide; this node animates and presents. Make one
+## with [method arriving] or [method resuming] and push it onto the ModeRouter.
 ##
 ## Click a hex to walk there; arrow keys step one hex; confirm interacts with a POI where the party
-## stands; cancel stops a walk. Fog hides the terrain, features and POIs the party hasn't seen.
+## stands; cancel stops a walk; the menu button opens the party menu. Fog hides the terrain,
+## features and POIs the party hasn't seen.
+
+const SCENE_PATH := "res://explore/view/explore_mode.tscn"
 
 ## Draw order: painted ground; then features, POIs and the party, sorted by row; then the route
 ## overlay; then fog.
@@ -23,15 +27,16 @@ const CURSOR_ACTIONS: Dictionary[StringName, Vector2] = {
 	&"cursor_right": Vector2.RIGHT,
 }
 
-## The MapDef to explore when the scene starts. Phase 3's mode router will choose it instead.
-@export var map_id: StringName = &"test_overworld"
-## The arrival point to start at.
-@export var entry_name: StringName = &"start"
-
-var _exploration: Exploration
+var _session: GameSession
+var _map_def: MapDef
+## The arrival point the party enters at. Unused when resuming at [member _position].
+var _entry: StringName
+## The party's entry in the session's map stack; set once it arrives.
+var _position: MapPosition
 var _map_scene: ExploreMapScene
+var _exploration: Exploration
 var _layout: HexLayout
-var _poi_host: HudPoiHost
+var _poi_host: ExplorePoiHost
 var _markers: Dictionary[Vector2i, PoiMarker] = {}
 ## Feature tiles hidden until their hex is explored: hex → [source id, atlas coords, alternative].
 var _hidden_features: Dictionary[Vector2i, Array] = {}
@@ -41,6 +46,8 @@ var _busy := false
 ## An ON_ENTER POI the last walk stopped on, to run once the walk ends.
 var _triggered_poi: PoiDef
 var _triggered_hex: Vector2i
+## A random battle the last walk ran into, to fight once the walk ends.
+var _encounter: EncounterDef
 
 @onready var _world: Node2D = $World
 @onready var _token: PartyToken = $World/PartyToken
@@ -48,57 +55,97 @@ var _triggered_hex: Vector2i
 @onready var _fog: TileMapLayer = $Fog
 @onready var _camera: MapCamera = $MapCamera
 @onready var _hud: ExploreHud = $Hud
+@onready var _menu: ScreenStack = $Menu
+
+
+## A mode that brings the party onto [param map_def] at its arrival point [param entry]. Once it's
+## ready, the map is on top of the session's map stack. [param scene] is the map's scene, already
+## instantiated; by default it's loaded from the MapDef.
+static func arriving(session: GameSession, map_def: MapDef, entry: StringName, scene: ExploreMapScene = null) -> ExploreMode:
+	var mode := _create(session, map_def, scene)
+	mode._entry = entry
+	return mode
+
+
+## A mode that carries on exploring [param map_def] with the party [param at] an entry of the
+## session's map stack, such as after loading a save.
+static func resuming(session: GameSession, map_def: MapDef, at: MapPosition) -> ExploreMode:
+	assert(at.map_id == map_def.id, "The party's position is on %s, not %s." % [at.map_id, map_def.id])
+	var mode := _create(session, map_def, null)
+	mode._position = at
+	return mode
+
+
+static func _create(session: GameSession, map_def: MapDef, scene: ExploreMapScene) -> ExploreMode:
+	var mode := (load(SCENE_PATH) as PackedScene).instantiate() as ExploreMode
+	mode._session = session
+	mode._map_def = map_def
+	mode._map_scene = scene
+	return mode
 
 
 func _ready() -> void:
-	if map_id.is_empty():
+	if _map_def == null:
+		push_warning("ExploreMode has no map to explore. Run the game from game/main.tscn.")
 		return
-	var map_def := ContentDB.get_def(map_id) as MapDef
-	assert(map_def != null, "No MapDef with id \"%s\"." % map_id)
-	explore(map_def, (load(map_def.scene) as PackedScene).instantiate() as ExploreMapScene, entry_name)
+	if _map_scene == null:
+		_map_scene = (load(_map_def.scene) as PackedScene).instantiate() as ExploreMapScene
+	_explore()
 
 
-## Starts exploring [param map_def] using [param scene], its instantiated map scene, with the party
-## at the arrival point named [param entry].
-func explore(map_def: MapDef, scene: ExploreMapScene, entry: StringName) -> void:
-	_map_scene = scene
-	_world.add_child(scene)
-	_world.move_child(scene, 0)
-	scene.terrain.z_index = Z_TERRAIN
+func _enter_tree() -> void:
+	# Back from a mode pushed over this one, such as a cave: time has passed meanwhile.
+	if _exploration:
+		_update_status()
+
+
+func _explore() -> void:
+	_world.add_child(_map_scene)
+	_world.move_child(_map_scene, 0)
+	_map_scene.terrain.z_index = Z_TERRAIN
 	var builder := ExploreMapBuilder.new(ContentDB.registry)
-	var map := builder.build(scene, map_def.id)
+	var map := builder.build(_map_scene, _map_def.id)
 	for problem: String in builder.problems:
-		push_warning("%s: %s" % [map_def.id, problem])
-	assert(map.has_entry(entry), "%s has no entry named \"%s\"." % [map_def.id, entry])
+		push_warning("%s: %s" % [_map_def.id, problem])
+	if _position == null:
+		assert(map.has_entry(_entry), "%s has no entry named \"%s\"." % [_map_def.id, _entry])
+		_position = _session.enter_map(_map_def.id, map.entry(_entry))
+		_hud.show_banner(_map_def.display_name)
 
-	_layout = _layout_matching(scene.terrain)
-	_exploration = Exploration.new(Game.session, map, map.entry(entry), map_def.fog_of_war, map_def.vision_radius)
-	_poi_host = HudPoiHost.new(_hud)
+	_layout = _layout_matching(_map_scene.terrain)
+	_exploration = Exploration.new(_session, map, _position, _map_def.fog_of_war, _map_def.vision_radius)
+	_poi_host = ExplorePoiHost.new(_hud, _exploration.arena_for)
 	_token.place(_layout, _exploration.party_hex)
 	_token.stepped.connect(_on_token_stepped)
 	_overlay.setup(_layout)
 	_overlay.z_index = Z_OVERLAY
 	_camera.target = _token
 	_camera.set_bounds(_map_bounds(map))
-	for marker: HexMarker in HexMarker.find_all(scene.markers):
+	for marker: HexMarker in HexMarker.find_all(_map_scene.markers):
 		if marker is PoiMarker:
-			var hex := marker.hex_on(scene.terrain)
+			var hex := marker.hex_on(_map_scene.terrain)
 			_markers[hex] = marker
 			(marker as PoiMarker).used = _exploration.is_used(hex)
 	_setup_fog()
 	_update_status()
-	_update_inventory()
-	Game.session.inventory.changed.connect(func(_item_id: StringName, _count: int) -> void: _update_inventory())
+	_update_purse()
+	_session.gold_changed.connect(_update_purse.unbind(1))
+	_menu.closed.connect(_on_menu_closed)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _menu.is_open():
+		return
 	if event.is_action_pressed(&"cancel") and _token.is_walking:
 		_token.stop()
 		return
 	if _busy or _exploration == null:
 		return
 	var click := event as InputEventMouseButton
-	if event is InputEventMouseMotion:
+	if event.is_action_pressed(&"menu"):
+		get_viewport().set_input_as_handled()
+		_open_menu()
+	elif event is InputEventMouseMotion:
 		_hover_at(_hex_under_mouse())
 	elif click and click.pressed and click.button_index == MOUSE_BUTTON_LEFT:
 		_go_to(_hex_under_mouse())
@@ -124,6 +171,10 @@ func _go_to(target: Vector2i) -> void:
 		var poi := _triggered_poi
 		_triggered_poi = null
 		await _run_poi(poi, _triggered_hex)
+	elif _encounter:
+		var encounter := _encounter
+		_encounter = null
+		await _poi_host.start_battle(encounter)
 	elif _token.hex == route[-1]:
 		await _interact_at(target)
 	_busy = false
@@ -149,10 +200,29 @@ func _interact_at(target: Vector2i) -> void:
 func _run_poi(poi: PoiDef, hex: Vector2i) -> void:
 	_busy = true
 	_overlay.clear()
-	await PoiRunner.run(poi, PoiContext.new(Game.session, _exploration.map_state, hex, _poi_host))
+	await PoiRunner.run(poi, PoiContext.new(_session, _exploration.map_state, hex, _poi_host))
 	if _markers.has(hex):
 		_markers[hex].used = _exploration.is_used(hex)
 	_busy = false
+	if _poi_host.exit_requested:
+		_poi_host.exit_requested = false
+		# Deferred, so the walk or keypress that ran the POI wraps up before this mode is popped.
+		# The router ignores input from then on.
+		Game.exit_map.call_deferred()
+
+
+## Opens the party menu over the map, which waits, camera and all, until it closes.
+func _open_menu() -> void:
+	_overlay.clear()
+	_hud.show_hex_info("")
+	_hovered = Vector2i.MAX
+	_camera.process_mode = Node.PROCESS_MODE_DISABLED
+	_menu.push(PartyScreen.new(_session, ContentDB.registry))
+
+
+func _on_menu_closed() -> void:
+	_camera.process_mode = Node.PROCESS_MODE_INHERIT
+	_hover_at(_hex_under_mouse())
 
 
 func _on_token_stepped(hex: Vector2i) -> void:
@@ -164,6 +234,9 @@ func _on_token_stepped(hex: Vector2i) -> void:
 	if outcome.triggered_poi:
 		_triggered_poi = outcome.triggered_poi
 		_triggered_hex = hex
+		_token.stop()
+	elif outcome.encounter:
+		_encounter = outcome.encounter
 		_token.stop()
 	_update_status()
 
@@ -202,19 +275,13 @@ func _describe(hex: Vector2i, route: Array[Vector2i]) -> String:
 
 
 func _update_status() -> void:
-	var session := Game.session
 	var region := _exploration.map.region_at(_exploration.party_hex)
-	var place := ("  ·  " + region.display_name) if region else ""
-	_hud.show_status("Day %d  %02d:00%s" % [session.day(), session.hour_of_day(), place])
+	var place := region.display_name if region else _map_def.display_name
+	_hud.show_status("Day %d  %02d:00  ·  %s" % [_session.day(), _session.hour_of_day(), place])
 
 
-func _update_inventory() -> void:
-	var inventory := Game.session.inventory
-	var lines := PackedStringArray()
-	for item_id: StringName in inventory.item_ids():
-		var item := ContentDB.get_def(item_id)
-		lines.append("%s ×%d" % [item.display_name if item else String(item_id), inventory.count_of(item_id)])
-	_hud.show_inventory("\n".join(lines))
+func _update_purse() -> void:
+	_hud.show_purse("%d gold\nTab: party" % _session.gold)
 
 
 func _setup_fog() -> void:

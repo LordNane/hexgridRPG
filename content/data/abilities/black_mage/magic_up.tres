@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_j7y87"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_ga8hv"]
+
+[sub_resource type="Resource" id="Resource_aiadu"]
+script = ExtResource("1_j7y87")
+stat = 4
+kind = 1
+value = 20.0
+
+[resource]
+script = ExtResource("2_ga8hv")
+kind = 2
+modifiers = Array[ExtResource("1_j7y87")]([SubResource("Resource_aiadu")])
+id = &"magic_up"
+display_name = "Magic Up"
+description = "Raises Magic by a fifth."

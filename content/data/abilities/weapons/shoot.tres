@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://content/effects/effect.gd" id="1_krabf"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_ps2c3"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_bwusj"]
+[ext_resource type="Script" path="res://content/effects/damage_effect.gd" id="2_rldik"]
+[ext_resource type="Script" path="res://content/defs/targeting_def.gd" id="5_vxse1"]
+
+[sub_resource type="Resource" id="Resource_dkpxu"]
+script = ExtResource("2_rldik")
+
+[sub_resource type="Resource" id="Resource_ahqdu"]
+script = ExtResource("5_vxse1")
+range_min = 2
+range_max = 4
+
+[resource]
+script = ExtResource("2_bwusj")
+targeting = SubResource("Resource_ahqdu")
+effects = Array[ExtResource("1_krabf")]([SubResource("Resource_dkpxu")])
+id = &"shoot"
+display_name = "Shoot"
+description = "Loose an arrow at a foe within range."

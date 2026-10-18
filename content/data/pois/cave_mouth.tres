@@ -1,19 +1,19 @@
 [gd_resource type="Resource" script_class="PoiDef" format=3]
 
 [ext_resource type="Script" path="res://content/poi_actions/poi_action.gd" id="1_3v3rv"]
-[ext_resource type="Script" path="res://content/poi_actions/show_message_action.gd" id="2_nd8ju"]
-[ext_resource type="Script" path="res://content/conditions/condition.gd" id="3_66mew"]
+[ext_resource type="Script" path="res://content/poi_actions/enter_map_action.gd" id="2_nd8ju"]
+[ext_resource type="Resource" path="res://content/data/maps/test_cave.tres" id="3_tcave"]
 [ext_resource type="Texture2D" path="res://assets/sprites/placeholder/poi/cave.png" id="4_s8eb2"]
 [ext_resource type="Script" path="res://content/defs/poi_def.gd" id="5_q2lih"]
 
 [sub_resource type="Resource" id="Resource_il3as"]
 script = ExtResource("2_nd8ju")
-text = "Cold air breathes out of the darkness. (Caves open up in Phase 3.)"
+map = ExtResource("3_tcave")
 
 [resource]
 script = ExtResource("5_q2lih")
 actions = Array[ExtResource("1_3v3rv")]([SubResource("Resource_il3as")])
 id = &"cave_mouth"
 display_name = "Cave Mouth"
-description = "A dark opening in the rock."
+description = "A dark opening in the rock. Cold air breathes out of it."
 icon = ExtResource("4_s8eb2")

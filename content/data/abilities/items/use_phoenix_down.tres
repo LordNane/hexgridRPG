@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_56n61"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_08xl3"]
+
+[resource]
+script = ExtResource("2_08xl3")
+id = &"use_phoenix_down"
+display_name = "Phoenix Down"
+description = "Revives a fallen ally with a little HP."

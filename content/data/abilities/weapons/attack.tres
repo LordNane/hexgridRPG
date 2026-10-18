@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_rlf8j"]
+[ext_resource type="Script" path="res://content/effects/effect.gd" id="1_vf5l8"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_6t1rl"]
+[ext_resource type="Script" path="res://content/effects/damage_effect.gd" id="2_lpmso"]
+[ext_resource type="Script" path="res://content/defs/targeting_def.gd" id="5_oyav0"]
+
+[sub_resource type="Resource" id="Resource_qptnh"]
+script = ExtResource("2_lpmso")
+
+[sub_resource type="Resource" id="Resource_pa132"]
+script = ExtResource("5_oyav0")
+vertical_reach = 2
+
+[resource]
+script = ExtResource("2_6t1rl")
+targeting = SubResource("Resource_pa132")
+effects = Array[ExtResource("1_vf5l8")]([SubResource("Resource_qptnh")])
+id = &"attack"
+display_name = "Attack"
+description = "Strike a foe next to you with your weapon."

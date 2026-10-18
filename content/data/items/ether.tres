@@ -1,9 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3]
+[gd_resource type="Resource" script_class="ConsumableDef" format=3]
 
-[ext_resource type="Script" path="res://content/defs/item_def.gd" id="1_gkpii"]
+[ext_resource type="Resource" path="res://content/data/abilities/items/use_ether.tres" id="1_s4ar4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/ether.png" id="2_6nr23"]
+[ext_resource type="Script" path="res://content/defs/consumable_def.gd" id="3_iflaf"]
 
 [resource]
-script = ExtResource("1_gkpii")
+script = ExtResource("3_iflaf")
+ability = ExtResource("1_s4ar4")
+price = 150
 id = &"ether"
 display_name = "Ether"
 description = "Restores a little MP."
+icon = ExtResource("2_6nr23")

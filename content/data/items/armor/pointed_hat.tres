@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/pointed_hat.png" id="1_n4n8q"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_1jy8p"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_b3t8a"]
+
+[sub_resource type="Resource" id="Resource_gcjwn"]
+script = ExtResource("2_1jy8p")
+stat = 1
+value = 5.0
+
+[sub_resource type="Resource" id="Resource_f8rif"]
+script = ExtResource("2_1jy8p")
+stat = 4
+value = 1.0
+
+[resource]
+script = ExtResource("3_b3t8a")
+slot = 2
+equip_tag = &"hat"
+modifiers = Array[ExtResource("2_1jy8p")]([SubResource("Resource_gcjwn"), SubResource("Resource_f8rif")])
+price = 90
+id = &"pointed_hat"
+display_name = "Pointed Hat"
+description = "A wide-brimmed hat that hums faintly."
+icon = ExtResource("1_n4n8q")

@@ -8,10 +8,27 @@ class_name TerrainDef extends Def
 @export var passable := true
 ## Whether it stops line of sight. The hex itself is still seen; hexes behind it aren't.
 @export var blocks_sight := false
+@export_group("Battle")
+## Move points it takes to step onto in battle; most ground takes 1.
+@export var battle_move_cost := 1
+## Arenas for random battles on this terrain. A feature's arenas come before these.
+@export_file("*.tscn") var battle_arenas: Array[String] = []
 
 
 func validate() -> PackedStringArray:
 	var problems := super()
 	if passable and move_cost <= 0.0:
 		problems.append("move_cost must be positive")
+	if passable and battle_move_cost < 1:
+		problems.append("battle_move_cost must be at least 1")
+	problems.append_array(arena_problems(battle_arenas))
+	return problems
+
+
+## Problems with a list of arena scene paths, for Defs that list arenas.
+static func arena_problems(arenas: Array[String]) -> PackedStringArray:
+	var problems := PackedStringArray()
+	for path: String in arenas:
+		if not ResourceLoader.exists(path):
+			problems.append("arena \"%s\" doesn't exist" % path)
 	return problems

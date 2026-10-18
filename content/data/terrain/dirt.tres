@@ -4,5 +4,6 @@
 
 [resource]
 script = ExtResource("1_kjdwm")
+battle_arenas = Array[String](["res://battle/arenas/forest_clearing.tscn"])
 id = &"dirt"
 display_name = "Dirt"

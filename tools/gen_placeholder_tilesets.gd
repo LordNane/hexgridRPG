@@ -5,8 +5,10 @@ extends SceneTree
 ## godot --headless --path . --import
 ## godot --headless --path . -s res://tools/gen_placeholder_tilesets.gd
 ## [/codeblock]
-## - overworld_tileset.tres: terrain, feature and region tiles for exploration maps. Each tile names
-##   its content through "terrain_id", "feature_id" or "region_id" custom data.
+## - overworld_tileset.tres: every hex map's tiles, exploration and battle: terrain, feature, region,
+##   height and prop tiles. Each names its content through "terrain_id", "feature_id",
+##   "region_id" or "prop_id" custom data; height tiles hold their "height", and terrain tiles hold
+##   the "cliff" texture battles draw under raised hexes.
 ## - fog_tileset.tres: the fog ExploreMode draws over unexplored and remembered hexes.
 ## Re-running overwrites both files, including any edits made in the editor.
 
@@ -17,16 +19,24 @@ const OUT_DIR := "res://assets/tilesets/"
 const TERRAIN_SOURCE := 0
 const FEATURE_SOURCE := 1
 const REGION_SOURCE := 2
+const HEIGHT_SOURCE := 3
+const PROP_SOURCE := 4
 
 ## Must match the rows gen_placeholder_art.gd draws and the ids in res://content/data/.
-const TERRAIN_IDS: Array[StringName] = [&"grass", &"dirt", &"stone", &"sand", &"water", &"snow", &"swamp"]
+const TERRAIN_IDS: Array[StringName] = [&"grass", &"dirt", &"stone", &"sand", &"water", &"snow", &"swamp", &"cave_wall"]
 const TERRAIN_VARIANTS := 4
 const FEATURE_IDS: Array[StringName] = [&"forest", &"hills", &"mountains"]
 const FEATURE_VARIANTS := 2
 ## Tints without an id are spares: give one a region_id in the TileSet editor to add a region.
 const REGION_IDS: Array[StringName] = [&"greenvale", &"thornwood", &"frost_reach", &"", &"", &""]
+## Height tiles 0–9, from height_digits.png.
+const HEIGHT_COUNT := 10
+## Must match the rows gen_placeholder_art.gd draws in props.png.
+const PROP_IDS: Array[StringName] = [&"tree", &"rock"]
+const PROP_VARIANTS := 2
 
 var _cell := HexLayout.new().cell_size
+var _step := HexLayout.new().elevation_step
 
 
 func _init() -> void:
@@ -38,17 +48,27 @@ func _init() -> void:
 
 func _overworld_tileset() -> TileSet:
 	var tile_set := _hex_tileset()
-	for key: StringName in [ExploreMapBuilder.TERRAIN_ID, ExploreMapBuilder.FEATURE_ID, ExploreMapBuilder.REGION_ID]:
+	var data_layers: Dictionary[StringName, Variant.Type] = {
+		ExploreMapBuilder.TERRAIN_ID: TYPE_STRING_NAME, ExploreMapBuilder.FEATURE_ID: TYPE_STRING_NAME,
+		ExploreMapBuilder.REGION_ID: TYPE_STRING_NAME, BattleMapBuilder.HEIGHT: TYPE_INT,
+		BattleMapBuilder.PROP_ID: TYPE_STRING_NAME, TileArt.CLIFF: TYPE_OBJECT,
+	}
+	for key: StringName in data_layers:
 		var layer := tile_set.get_custom_data_layers_count()
 		tile_set.add_custom_data_layer()
 		tile_set.set_custom_data_layer_name(layer, key)
-		tile_set.set_custom_data_layer_type(layer, TYPE_STRING_NAME)
+		tile_set.set_custom_data_layer_type(layer, data_layers[key])
 
 	var terrain := _atlas("terrain_tops.png", _cell)
 	tile_set.add_source(terrain, TERRAIN_SOURCE)
+	var cliffs: Texture2D = load(ART_DIR + "cliff_faces.png")
 	for row: int in TERRAIN_IDS.size():
+		var cliff := AtlasTexture.new()
+		cliff.atlas = cliffs
+		cliff.region = Rect2(0, row * (_cell.y + _step), _cell.x, _cell.y + _step)
 		for variant: int in TERRAIN_VARIANTS:
-			_add_tile(terrain, Vector2i(variant, row), ExploreMapBuilder.TERRAIN_ID, TERRAIN_IDS[row])
+			var tile := _add_tile(terrain, Vector2i(variant, row), ExploreMapBuilder.TERRAIN_ID, TERRAIN_IDS[row])
+			tile.set_custom_data(TileArt.CLIFF, cliff)
 
 	# Feature art is two hexes tall; lift it so its bottom half covers the hex, and sort it just
 	# before anything else on the same hex so the party stands in front of its own forest.
@@ -64,6 +84,21 @@ func _overworld_tileset() -> TileSet:
 	tile_set.add_source(regions, REGION_SOURCE)
 	for i: int in REGION_IDS.size():
 		_add_tile(regions, Vector2i(i, 0), ExploreMapBuilder.REGION_ID, REGION_IDS[i])
+
+	var heights := _atlas("height_digits.png", _cell)
+	tile_set.add_source(heights, HEIGHT_SOURCE)
+	for height: int in HEIGHT_COUNT:
+		heights.create_tile(Vector2i(height, 0))
+		heights.get_tile_data(Vector2i(height, 0), 0).set_custom_data(BattleMapBuilder.HEIGHT, height)
+
+	# Props stand on their hex like features do.
+	var props := _atlas("props.png", Vector2i(_cell.x, _cell.y * 2))
+	tile_set.add_source(props, PROP_SOURCE)
+	for row: int in PROP_IDS.size():
+		for variant: int in PROP_VARIANTS:
+			var tile := _add_tile(props, Vector2i(variant, row), BattleMapBuilder.PROP_ID, PROP_IDS[row])
+			tile.texture_origin = Vector2i(0, _cell.y / 2)
+			tile.y_sort_origin = -1
 	return tile_set
 
 

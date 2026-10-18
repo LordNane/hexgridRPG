@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PropDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/prop_def.gd" id="1_lax5v"]
+
+[resource]
+script = ExtResource("1_lax5v")
+id = &"tree"
+display_name = "Tree"
+description = "A tall tree. Nothing gets through it."

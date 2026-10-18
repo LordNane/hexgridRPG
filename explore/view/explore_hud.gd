@@ -1,6 +1,6 @@
 class_name ExploreHud extends CanvasLayer
-## The exploration screen's text: the day, hour and region; what's under the cursor; what the party
-## carries; region names as the party enters them; and POI messages that wait for the player.
+## The exploration screen's text: the day, hour and region; what's under the cursor; the party's
+## gold; region names as the party enters them; and POI messages that wait for the player.
 
 ## Emitted when the player dismisses the message box.
 signal message_dismissed
@@ -12,7 +12,7 @@ var _banner_tween: Tween
 
 @onready var _status: Label = %Status
 @onready var _hex_info: Label = %HexInfo
-@onready var _inventory: Label = %Inventory
+@onready var _purse: Label = %Purse
 @onready var _banner: Label = %Banner
 @onready var _message_panel: PanelContainer = %MessagePanel
 @onready var _message: Label = %Message
@@ -26,8 +26,8 @@ func show_hex_info(text: String) -> void:
 	_hex_info.text = text
 
 
-func show_inventory(text: String) -> void:
-	_inventory.text = text
+func show_purse(text: String) -> void:
+	_purse.text = text
 
 
 ## Fades [param text] in at the top of the screen, then out again.

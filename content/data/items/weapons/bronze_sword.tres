@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/attack.tres" id="1_jvc1c"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/bronze_sword.png" id="2_bsxff"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_diobe"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_6qkyq"]
+
+[sub_resource type="Resource" id="Resource_jjj2s"]
+script = ExtResource("3_diobe")
+value = 3.0
+
+[resource]
+script = ExtResource("4_6qkyq")
+attack = ExtResource("1_jvc1c")
+slot = 0
+equip_tag = &"sword"
+modifiers = Array[ExtResource("3_diobe")]([SubResource("Resource_jjj2s")])
+price = 100
+id = &"bronze_sword"
+display_name = "Bronze Sword"
+description = "A soldier's first blade."
+icon = ExtResource("2_bsxff")

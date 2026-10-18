@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/cotton_robe.png" id="1_a70ac"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_gq80o"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_4nhyi"]
+
+[sub_resource type="Resource" id="Resource_uc3kj"]
+script = ExtResource("2_gq80o")
+stat = 0
+value = 6.0
+
+[sub_resource type="Resource" id="Resource_jt83x"]
+script = ExtResource("2_gq80o")
+stat = 1
+value = 8.0
+
+[sub_resource type="Resource" id="Resource_j4d0f"]
+script = ExtResource("2_gq80o")
+stat = 5
+value = 2.0
+
+[resource]
+script = ExtResource("3_4nhyi")
+equip_tag = &"robe"
+modifiers = Array[ExtResource("2_gq80o")]([SubResource("Resource_uc3kj"), SubResource("Resource_jt83x"), SubResource("Resource_j4d0f")])
+price = 110
+id = &"cotton_robe"
+display_name = "Cotton Robe"
+description = "A loose robe, woven with warding threads."
+icon = ExtResource("1_a70ac")

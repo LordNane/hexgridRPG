@@ -48,6 +48,41 @@ func test_an_unmet_condition_explains_and_skips_the_actions() -> void:
 	assert_eq(_session.inventory.count_of(&"ether"), 1)
 
 
+func test_a_chest_can_hold_gold() -> void:
+	var loot := FakeContent.give(FakeContent.item(&"potion"), 1)
+	loot.gold = 50
+	await PoiRunner.run(FakeContent.poi(&"chest", [loot]), _context())
+	assert_eq(_session.gold, 50)
+	var expected: Array[String] = ["Found Potion ×1, 50 gold."]
+	assert_eq(_host.said, expected)
+
+
+func test_entering_a_map_waits_until_the_party_comes_back() -> void:
+	_host.waits_in_maps = true
+	var mouth := FakeContent.poi(&"mouth", [FakeContent.enter(FakeContent.map_def(&"cave"), &"mouth"),
+			FakeContent.message("You blink in the daylight.")])
+	PoiRunner.run(mouth, _context())
+	var entered: Array[String] = ["cave:mouth"]
+	assert_eq(_host.entered, entered)
+	assert_true(_host.said.is_empty(), "the rest waits while the party is in the cave")
+	_host.party_returned.emit()
+	var expected: Array[String] = ["You blink in the daylight."]
+	assert_eq(_host.said, expected)
+
+
+func test_an_exit_asks_to_leave_the_map() -> void:
+	await PoiRunner.run(FakeContent.poi(&"exit", [ExitMapAction.new()]), _context())
+	assert_eq(_host.exits, 1)
+
+
+func test_a_battle_poi_fights_its_encounter() -> void:
+	var battle := StartBattleAction.new()
+	battle.encounter = FakeContent.encounter(&"ambush", [])
+	await PoiRunner.run(FakeContent.poi(&"camp", [battle]), _context())
+	var fought: Array[String] = ["ambush"]
+	assert_eq(_host.battles, fought)
+
+
 func test_a_repeatable_poi_runs_every_time() -> void:
 	var sign_post := FakeContent.poi(&"sign", [FakeContent.message("North: the Frost Reach.")])
 	await PoiRunner.run(sign_post, _context())

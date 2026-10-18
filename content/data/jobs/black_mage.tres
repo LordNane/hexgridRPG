@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="JobDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="1_lqwdx"]
+[ext_resource type="Resource" path="res://content/data/abilities/black_mage/fire.tres" id="2_7y4yn"]
+[ext_resource type="Resource" path="res://content/data/abilities/black_mage/thunder.tres" id="3_r0nkk"]
+[ext_resource type="Resource" path="res://content/data/abilities/black_mage/magic_up.tres" id="4_t5y6g"]
+[ext_resource type="Script" path="res://content/defs/job_def.gd" id="5_0wb48"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/jobs/black_mage.png" id="6_4xxfo"]
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/punch.tres" id="7_7y4yn"]
+[ext_resource type="Script" path="res://content/conditions/condition.gd" id="7_h3xjy"]
+
+[resource]
+script = ExtResource("5_0wb48")
+command_name = "Black Magic"
+stat_multipliers = Dictionary[int, int]({
+0: 80,
+1: 130,
+2: 60,
+3: 70,
+4: 130,
+5: 100,
+6: 100
+})
+stat_growth = Dictionary[int, float]({
+0: 2.5,
+1: 1.5,
+2: 0.2,
+3: 0.2,
+4: 0.7,
+5: 0.4,
+6: 0.1
+})
+move = 3
+equip_tags = Array[StringName]([&"rod", &"knife", &"hat", &"robe"])
+unarmed_attack = ExtResource("7_7y4yn")
+abilities = Dictionary[ExtResource("1_lqwdx"), int]({
+ExtResource("2_7y4yn"): 50,
+ExtResource("3_r0nkk"): 50,
+ExtResource("4_t5y6g"): 300
+})
+sprite = ExtResource("6_4xxfo")
+id = &"black_mage"
+display_name = "Black Mage"
+description = "Calls down fire and lightning on foes, but can't take much of a beating."

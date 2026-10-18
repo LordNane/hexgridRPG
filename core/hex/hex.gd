@@ -1,3 +1,4 @@
+@tool
 class_name Hex
 ## Axial hex-grid math for flat-top hexes. A hex is a [Vector2i] holding (q, r).
 ##

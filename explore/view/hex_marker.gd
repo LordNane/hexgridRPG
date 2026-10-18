@@ -1,7 +1,8 @@
 @tool
 class_name HexMarker extends Node2D
-## A node placed on an authored hex map, such as a POI or an arrival point. In the editor it snaps
-## to the nearest hex center of its map's terrain layer.
+## A node placed on an authored hex map, such as a POI, an arrival point or a battle spawn. In the
+## editor it snaps to the nearest hex center of its map's terrain layer: the [code]terrain[/code]
+## of the scene root, an ExploreMapScene or a BattleArena.
 
 
 func _ready() -> void:
@@ -29,10 +30,9 @@ func hex_on(tiles: TileMapLayer) -> Vector2i:
 
 
 func _snap_to_hex() -> void:
-	var map := owner as ExploreMapScene
-	if map == null or map.terrain == null:
+	var tiles: TileMapLayer = owner.get(&"terrain") as TileMapLayer if owner else null
+	if tiles == null:
 		return
-	var tiles := map.terrain
 	var center := tiles.to_global(tiles.map_to_local(hex_on(tiles)))
 	if not global_position.is_equal_approx(center):
 		global_position = center

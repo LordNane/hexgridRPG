@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EncounterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/enemy_def.gd" id="1_8eo80"]
+[ext_resource type="Resource" path="res://content/data/enemies/bandit.tres" id="2_l0m8c"]
+[ext_resource type="Resource" path="res://content/data/enemies/bandit_archer.tres" id="3_cg2c0"]
+[ext_resource type="Script" path="res://content/defs/encounter_def.gd" id="4_jnil7"]
+
+[resource]
+script = ExtResource("4_jnil7")
+enemies = Array[ExtResource("1_8eo80")]([ExtResource("2_l0m8c"), ExtResource("2_l0m8c"), ExtResource("3_cg2c0")])
+id = &"bandit_patrol"
+display_name = "Bandit Patrol"
+description = "Two bandits and an archer working the road."

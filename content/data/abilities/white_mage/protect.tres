@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_jppsv"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_wgl6h"]
+
+[resource]
+script = ExtResource("2_wgl6h")
+mp_cost = 8
+id = &"protect"
+display_name = "Protect"
+description = "Raise an ally's Defense for a while."

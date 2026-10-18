@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/item_def.gd" id="1_5kdry"]
+[ext_resource type="Resource" path="res://content/data/items/potion.tres" id="2_mfsb5"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_wj62d"]
+[ext_resource type="Resource" path="res://content/data/items/weapons/bronze_sword.tres" id="4_dnv4l"]
+[ext_resource type="Resource" path="res://content/data/items/armor/leather_vest.tres" id="5_o35yi"]
+[ext_resource type="Resource" path="res://content/data/jobs/squire.tres" id="6_4j4eb"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="7_6dlnw"]
+[ext_resource type="Script" path="res://content/defs/enemy_def.gd" id="8_g47ep"]
+
+[resource]
+script = ExtResource("8_g47ep")
+gold = 30
+drops = Dictionary[ExtResource("1_5kdry"), float]({
+ExtResource("2_mfsb5"): 0.35
+})
+job = ExtResource("6_4j4eb")
+level = 2
+base_stats = Dictionary[int, int]({
+0: 38,
+1: 8,
+2: 7,
+3: 4,
+4: 3,
+5: 3,
+6: 6
+})
+equipment = Array[ExtResource("3_wj62d")]([ExtResource("4_dnv4l"), ExtResource("5_o35yi")])
+id = &"bandit"
+display_name = "Bandit"
+description = "A highway robber with a notched blade."

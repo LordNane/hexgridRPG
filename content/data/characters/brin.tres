@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="CharacterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="1_k614u"]
+[ext_resource type="Resource" path="res://content/data/items/weapons/longbow.tres" id="2_c8pl1"]
+[ext_resource type="Resource" path="res://content/data/items/armor/leather_cap.tres" id="3_ggdmd"]
+[ext_resource type="Resource" path="res://content/data/items/armor/leather_vest.tres" id="4_fuodl"]
+[ext_resource type="Resource" path="res://content/data/jobs/archer.tres" id="5_q1d4s"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="6_vamid"]
+[ext_resource type="Resource" path="res://content/data/abilities/archer/aimed_shot.tres" id="7_kgofb"]
+[ext_resource type="Resource" path="res://content/data/abilities/archer/jump_plus_1.tres" id="8_5ukba"]
+[ext_resource type="Script" path="res://content/defs/character_def.gd" id="9_twaui"]
+
+[resource]
+script = ExtResource("9_twaui")
+job = ExtResource("5_q1d4s")
+level = 2
+base_stats = Dictionary[int, int]({
+0: 38,
+1: 12,
+2: 7,
+3: 4,
+4: 5,
+5: 4,
+6: 7
+})
+equipment = Array[ExtResource("1_k614u")]([ExtResource("2_c8pl1"), ExtResource("3_ggdmd"), ExtResource("4_fuodl")])
+learned = Array[ExtResource("6_vamid")]([ExtResource("7_kgofb"), ExtResource("8_5ukba")])
+id = &"brin"
+display_name = "Brin"
+description = "A hunter with a keen eye and few words."

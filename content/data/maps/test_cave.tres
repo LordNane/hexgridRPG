@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/map_def.gd" id="1_tcave"]
+
+[resource]
+script = ExtResource("1_tcave")
+scene = "res://explore/maps/test_cave.tscn"
+vision_radius = 2
+id = &"test_cave"
+display_name = "Test Cave"
+description = "A small cave under the hills, for trying out locations."

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_24074"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_cqmni"]
+
+[sub_resource type="Resource" id="Resource_rvhc1"]
+script = ExtResource("1_24074")
+stat = 8
+value = 1.0
+
+[resource]
+script = ExtResource("2_cqmni")
+kind = 3
+modifiers = Array[ExtResource("1_24074")]([SubResource("Resource_rvhc1")])
+id = &"jump_plus_1"
+display_name = "Jump +1"
+description = "Climb or drop one more level in a single step."

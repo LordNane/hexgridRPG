@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CharacterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="1_ia8ia"]
+[ext_resource type="Resource" path="res://content/data/items/weapons/bronze_sword.tres" id="2_vey57"]
+[ext_resource type="Resource" path="res://content/data/items/armor/buckler.tres" id="3_uq40h"]
+[ext_resource type="Resource" path="res://content/data/items/armor/leather_cap.tres" id="4_8pewl"]
+[ext_resource type="Resource" path="res://content/data/items/armor/leather_vest.tres" id="5_4smob"]
+[ext_resource type="Resource" path="res://content/data/jobs/squire.tres" id="6_2fagp"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="7_p4w0f"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/focus.tres" id="8_atskl"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/throw_stone.tres" id="9_mlkac"]
+[ext_resource type="Resource" path="res://content/data/abilities/squire/move_plus_1.tres" id="10_notoi"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/cure.tres" id="11_8egb8"]
+[ext_resource type="Script" path="res://content/defs/character_def.gd" id="12_h2qfy"]
+
+[resource]
+script = ExtResource("12_h2qfy")
+job = ExtResource("6_2fagp")
+level = 3
+base_stats = Dictionary[int, int]({
+0: 42,
+1: 12,
+2: 7,
+3: 5,
+4: 5,
+5: 4,
+6: 6
+})
+equipment = Array[ExtResource("1_ia8ia")]([ExtResource("2_vey57"), ExtResource("3_uq40h"), ExtResource("4_8pewl"), ExtResource("5_4smob")])
+learned = Array[ExtResource("7_p4w0f")]([ExtResource("8_atskl"), ExtResource("9_mlkac"), ExtResource("10_notoi"), ExtResource("11_8egb8")])
+id = &"alden"
+display_name = "Alden"
+description = "A squire who left home to see the world."

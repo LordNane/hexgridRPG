@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/attack.tres" id="1_m54bh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/dagger.png" id="2_07npi"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_7b7yq"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_pkhou"]
+
+[sub_resource type="Resource" id="Resource_qwwgk"]
+script = ExtResource("3_7b7yq")
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_r5bqu"]
+script = ExtResource("3_7b7yq")
+stat = 6
+value = 1.0
+
+[resource]
+script = ExtResource("4_pkhou")
+attack = ExtResource("1_m54bh")
+slot = 0
+equip_tag = &"knife"
+modifiers = Array[ExtResource("3_7b7yq")]([SubResource("Resource_qwwgk"), SubResource("Resource_r5bqu")])
+price = 80
+id = &"dagger"
+display_name = "Dagger"
+description = "Light and quick in the hand."
+icon = ExtResource("2_07npi")

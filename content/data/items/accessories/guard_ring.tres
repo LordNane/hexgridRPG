@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/guard_ring.png" id="1_g4nx7"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_qhdwl"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_tyfjb"]
+
+[sub_resource type="Resource" id="Resource_r1q3x"]
+script = ExtResource("2_qhdwl")
+stat = 3
+kind = 1
+value = 10.0
+
+[sub_resource type="Resource" id="Resource_h12tc"]
+script = ExtResource("2_qhdwl")
+stat = 5
+kind = 1
+value = 10.0
+
+[resource]
+script = ExtResource("3_tyfjb")
+slot = 4
+modifiers = Array[ExtResource("2_qhdwl")]([SubResource("Resource_r1q3x"), SubResource("Resource_h12tc")])
+price = 400
+id = &"guard_ring"
+display_name = "Guard Ring"
+description = "A plain band that turns aside harm."
+icon = ExtResource("1_g4nx7")

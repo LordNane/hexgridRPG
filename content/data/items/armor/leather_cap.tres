@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/leather_cap.png" id="1_42r1n"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_bn0l6"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_8dgcl"]
+
+[sub_resource type="Resource" id="Resource_rlmrp"]
+script = ExtResource("2_bn0l6")
+stat = 0
+value = 8.0
+
+[sub_resource type="Resource" id="Resource_wsqao"]
+script = ExtResource("2_bn0l6")
+stat = 3
+value = 1.0
+
+[resource]
+script = ExtResource("3_8dgcl")
+slot = 2
+equip_tag = &"hat"
+modifiers = Array[ExtResource("2_bn0l6")]([SubResource("Resource_rlmrp"), SubResource("Resource_wsqao")])
+price = 60
+id = &"leather_cap"
+display_name = "Leather Cap"
+description = "Boiled leather, shaped to the head."
+icon = ExtResource("1_42r1n")

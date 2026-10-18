@@ -54,8 +54,13 @@ func _compile_all() -> int:
 	var scripts := _find_scripts("res://")
 	var failed: Array[String] = []
 	for path: String in scripts:
+		# This script is running, so it compiled cleanly; parsing it again would replace it mid-run.
+		if path == (get_script() as Script).resource_path:
+			continue
 		var errors_before := errors.count
-		load(path)
+		# Parse afresh: scripts the autoloads use were compiled at startup, before the counter was
+		# listening, and the cache would hand back those results without reporting them again.
+		ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
 		if errors.count > errors_before:
 			failed.append(path)
 	OS.remove_logger(errors)

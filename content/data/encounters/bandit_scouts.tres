@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EncounterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/enemy_def.gd" id="1_cnirl"]
+[ext_resource type="Resource" path="res://content/data/enemies/bandit_archer.tres" id="2_2pn85"]
+[ext_resource type="Script" path="res://content/defs/encounter_def.gd" id="3_3s5ec"]
+
+[resource]
+script = ExtResource("3_3s5ec")
+enemies = Array[ExtResource("1_cnirl")]([ExtResource("2_2pn85"), ExtResource("2_2pn85")])
+id = &"bandit_scouts"
+display_name = "Bandit Scouts"
+description = "A pair of archers watching the road."

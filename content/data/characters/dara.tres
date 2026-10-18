@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="CharacterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="1_65ni7"]
+[ext_resource type="Resource" path="res://content/data/items/weapons/ash_rod.tres" id="2_ni7ln"]
+[ext_resource type="Resource" path="res://content/data/items/armor/pointed_hat.tres" id="3_aa85h"]
+[ext_resource type="Resource" path="res://content/data/items/armor/cotton_robe.tres" id="4_gaaak"]
+[ext_resource type="Resource" path="res://content/data/jobs/black_mage.tres" id="5_vabyi"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="6_4n43e"]
+[ext_resource type="Resource" path="res://content/data/abilities/black_mage/fire.tres" id="7_6da1p"]
+[ext_resource type="Resource" path="res://content/data/abilities/black_mage/thunder.tres" id="8_0ejhn"]
+[ext_resource type="Script" path="res://content/defs/character_def.gd" id="9_farx7"]
+
+[resource]
+script = ExtResource("9_farx7")
+job = ExtResource("5_vabyi")
+level = 2
+base_stats = Dictionary[int, int]({
+0: 34,
+1: 16,
+2: 5,
+3: 4,
+4: 8,
+5: 5,
+6: 6
+})
+equipment = Array[ExtResource("1_65ni7")]([ExtResource("2_ni7ln"), ExtResource("3_aa85h"), ExtResource("4_gaaak")])
+learned = Array[ExtResource("6_4n43e")]([ExtResource("7_6da1p"), ExtResource("8_0ejhn")])
+id = &"dara"
+display_name = "Dara"
+description = "A scholar of the old fire, with more nerve than sense."

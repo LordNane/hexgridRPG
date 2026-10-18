@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="CharacterDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="1_us7by"]
+[ext_resource type="Resource" path="res://content/data/items/weapons/oak_staff.tres" id="2_84fav"]
+[ext_resource type="Resource" path="res://content/data/items/armor/pointed_hat.tres" id="3_a8xca"]
+[ext_resource type="Resource" path="res://content/data/items/armor/cotton_robe.tres" id="4_wnl1f"]
+[ext_resource type="Resource" path="res://content/data/jobs/white_mage.tres" id="5_x2o1r"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="6_suyn7"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/cure.tres" id="7_0xsi2"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/protect.tres" id="8_gvqm5"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/regenerator.tres" id="9_3rqye"]
+[ext_resource type="Script" path="res://content/defs/character_def.gd" id="10_nli4k"]
+
+[resource]
+script = ExtResource("10_nli4k")
+job = ExtResource("5_x2o1r")
+level = 2
+base_stats = Dictionary[int, int]({
+0: 36,
+1: 16,
+2: 5,
+3: 4,
+4: 7,
+5: 6,
+6: 6
+})
+equipment = Array[ExtResource("1_us7by")]([ExtResource("2_84fav"), ExtResource("3_a8xca"), ExtResource("4_wnl1f")])
+learned = Array[ExtResource("6_suyn7")]([ExtResource("7_0xsi2"), ExtResource("8_gvqm5"), ExtResource("9_3rqye")])
+id = &"cass"
+display_name = "Cass"
+description = "A healer from the temple at Greenvale."

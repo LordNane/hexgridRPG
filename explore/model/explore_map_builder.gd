@@ -38,26 +38,8 @@ func build(source: ExploreMapScene, map_id: StringName) -> ExploreMap:
 	return map
 
 
-## Calls [param place] with each painted hex of [param layer] and the [param type] Def that its
-## tile's [param key] custom data names.
 func _read_layer(layer: TileMapLayer, key: StringName, type: Script, place: Callable) -> void:
-	if layer.tile_set == null or layer.tile_set.get_custom_data_layer_by_name(key) < 0:
-		problems.append("%s: its TileSet has no \"%s\" custom data layer" % [layer.name, key])
-		return
-	var unknown: Dictionary[StringName, Array] = {}
-	for hex: Vector2i in layer.get_used_cells():
-		var id: StringName = layer.get_cell_tile_data(hex).get_custom_data(key)
-		var def := _content.get_def(id)
-		if def and is_instance_of(def, type):
-			place.call(hex, def)
-		else:
-			if not unknown.has(id):
-				unknown[id] = []
-			unknown[id].append(hex)
-	for id: StringName in unknown:
-		var hexes: Array = unknown[id]
-		var what := "no %s" % key if id.is_empty() else "\"%s\", which isn't a %s" % [id, type.get_global_name()]
-		problems.append("%s: %d tiles have %s (first at %s)" % [layer.name, hexes.size(), what, hexes[0]])
+	problems.append_array(TileLayerReader.read_defs(layer, key, type, _content, place))
 
 
 func _add_marker(map: ExploreMap, marker: HexMarker, hex: Vector2i) -> void:

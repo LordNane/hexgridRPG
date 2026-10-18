@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/attack.tres" id="1_nyf5p"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/oak_staff.png" id="2_nhgj4"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_122ka"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_7esjn"]
+
+[sub_resource type="Resource" id="Resource_4e4no"]
+script = ExtResource("3_122ka")
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_jvrin"]
+script = ExtResource("3_122ka")
+stat = 4
+value = 2.0
+
+[resource]
+script = ExtResource("4_7esjn")
+attack = ExtResource("1_nyf5p")
+slot = 0
+equip_tag = &"staff"
+modifiers = Array[ExtResource("3_122ka")]([SubResource("Resource_4e4no"), SubResource("Resource_jvrin")])
+price = 90
+id = &"oak_staff"
+display_name = "Oak Staff"
+description = "A walking staff that steadies white magic."
+icon = ExtResource("2_nhgj4")

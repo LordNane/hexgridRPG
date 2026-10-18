@@ -1,9 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3]
+[gd_resource type="Resource" script_class="ConsumableDef" format=3]
 
-[ext_resource type="Script" path="res://content/defs/item_def.gd" id="1_m16dp"]
+[ext_resource type="Resource" path="res://content/data/abilities/items/use_antidote.tres" id="1_ncmjb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/antidote.png" id="2_cct6e"]
+[ext_resource type="Script" path="res://content/defs/consumable_def.gd" id="3_sqhei"]
 
 [resource]
-script = ExtResource("1_m16dp")
+script = ExtResource("3_sqhei")
+ability = ExtResource("1_ncmjb")
+price = 30
 id = &"antidote"
 display_name = "Antidote"
 description = "Cures poison."
+icon = ExtResource("2_cct6e")

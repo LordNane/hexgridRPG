@@ -1,6 +1,7 @@
 class_name MapCamera extends Camera2D
 ## Follows a target and lets the player look around with the camera keys, a stick or a middle-mouse
-## drag. Zooms in whole steps so pixels stay crisp, and never shows past the map's edges.
+## drag. Zooms in whole steps so pixels stay crisp, and never shows past the map's edges; a map
+## smaller than the screen sits in its middle.
 
 ## Pixels per second when panning with keys or a stick.
 @export var pan_speed := 220.0
@@ -18,10 +19,7 @@ var _bounds := Rect2()
 ## Keeps the view inside [param bounds], in world pixels.
 func set_bounds(bounds: Rect2) -> void:
 	_bounds = bounds
-	limit_left = floori(bounds.position.x)
-	limit_top = floori(bounds.position.y)
-	limit_right = ceili(bounds.end.x)
-	limit_bottom = ceili(bounds.end.y)
+	_update_limits()
 
 
 ## Looks back at the target, for example when the party sets off.
@@ -54,3 +52,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func _set_zoom_index(index: int) -> void:
 	_zoom_index = clampi(index, 0, zoom_levels.size() - 1)
 	zoom = Vector2.ONE * zoom_levels[_zoom_index]
+	_update_limits()
+
+
+## Limits the view to the map's bounds, widened evenly on each side where the map is smaller than
+## the view so it's centered.
+func _update_limits() -> void:
+	if not _bounds.has_area():
+		return
+	var spare := (get_viewport_rect().size / zoom - _bounds.size).max(Vector2.ZERO) / 2.0
+	var shown := _bounds.grow_individual(spare.x, spare.y, spare.x, spare.y)
+	limit_left = floori(shown.position.x)
+	limit_top = floori(shown.position.y)
+	limit_right = ceili(shown.end.x)
+	limit_bottom = ceili(shown.end.y)

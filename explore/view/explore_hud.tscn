@@ -1,12 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://explore/view/explore_hud.gd" id="1_hud"]
-
-[sub_resource type="Theme" id="Theme_hud"]
-default_font_size = 10
-Label/colors/font_shadow_color = Color(0, 0, 0, 0.85)
-Label/constants/shadow_offset_x = 1
-Label/constants/shadow_offset_y = 1
+[ext_resource type="Theme" path="res://ui/theme/pixel_theme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_message"]
 content_margin_left = 8.0
@@ -31,7 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = SubResource("Theme_hud")
+theme = ExtResource("2_theme")
 
 [node name="Status" type="Label" parent="Root"]
 unique_name_in_owner = true
@@ -41,7 +36,7 @@ offset_top = 4.0
 offset_right = 320.0
 offset_bottom = 18.0
 
-[node name="Inventory" type="Label" parent="Root"]
+[node name="Purse" type="Label" parent="Root"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1

@@ -11,6 +11,8 @@ class StepOutcome:
 	var entered_region: RegionDef
 	## An ON_ENTER POI the party just stepped onto. The walk should stop and run it.
 	var triggered_poi: PoiDef
+	## A random battle the step ran into. The walk should stop and the battle start.
+	var encounter: EncounterDef
 	## Hours the step took.
 	var hours := 0.0
 
@@ -21,11 +23,18 @@ var map_state: MapState
 ## Null on maps without fog of war.
 var fog: FogOfWar
 var movement: ExploreMovement
-var party_hex: Vector2i
+## Where the party stands on this map: its entry in the session's map stack, moved with every step.
+var position: MapPosition
+## The hex the party stands on.
+var party_hex: Vector2i:
+	get:
+		return position.hex
 var vision_radius: int
 
 
-func _init(game_session: GameSession, explore_map: ExploreMap, start_hex: Vector2i, has_fog: bool = true, sight: int = 3) -> void:
+## [param at] is where the party stands on [param explore_map], usually [method GameSession.location].
+func _init(game_session: GameSession, explore_map: ExploreMap, at: MapPosition, has_fog: bool = true, sight: int = 3) -> void:
+	assert(at.map_id == explore_map.id, "The party's position is on %s, not %s." % [at.map_id, explore_map.id])
 	session = game_session
 	map = explore_map
 	map_state = session.world.map_state(map.id)
@@ -33,7 +42,7 @@ func _init(game_session: GameSession, explore_map: ExploreMap, start_hex: Vector
 		fog = FogOfWar.new(map, map_state.explored)
 	movement = ExploreMovement.new(map, fog)
 	vision_radius = sight
-	party_hex = start_hex
+	position = at
 	look()
 
 
@@ -88,7 +97,7 @@ func step_to(hex: Vector2i) -> StepOutcome:
 	var previous_region := map.region_at(party_hex)
 	outcome.hours = movement.step_cost(party_hex, hex)
 	session.advance_time(outcome.hours)
-	party_hex = hex
+	position.hex = hex
 	outcome.fog_changed = look()
 	var region := map.region_at(hex)
 	if region and region != previous_region:
@@ -96,7 +105,14 @@ func step_to(hex: Vector2i) -> StepOutcome:
 	var poi := map.poi_at(hex)
 	if poi and poi.trigger == PoiDef.Trigger.ON_ENTER and not is_used(hex):
 		outcome.triggered_poi = poi
+	else:
+		outcome.encounter = EncounterRoller.roll(session, region.encounters if region else null)
 	return outcome
+
+
+## An arena for a battle against [param encounter] where the party stands, or "" if there's none.
+func arena_for(encounter: EncounterDef) -> String:
+	return EncounterRoller.pick_arena(encounter, map.terrain_at(party_hex), map.feature_at(party_hex), session.rng)
 
 
 ## The POI to interact with at [param target] once the party has walked toward it (or pressed

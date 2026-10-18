@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PoiDef" format=3]
+
+[ext_resource type="Script" path="res://content/poi_actions/poi_action.gd" id="1_cchest"]
+[ext_resource type="Script" path="res://content/defs/item_def.gd" id="2_cchest"]
+[ext_resource type="Resource" path="res://content/data/items/potion.tres" id="3_cchest"]
+[ext_resource type="Resource" path="res://content/data/items/ether.tres" id="4_cchest"]
+[ext_resource type="Script" path="res://content/poi_actions/give_items_action.gd" id="5_cchest"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/poi/chest.png" id="6_cchest"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/poi/chest_open.png" id="7_cchest"]
+[ext_resource type="Script" path="res://content/defs/poi_def.gd" id="8_cchest"]
+
+[sub_resource type="Resource" id="Resource_loot"]
+script = ExtResource("5_cchest")
+items = Dictionary[ExtResource("2_cchest"), int]({
+ExtResource("3_cchest"): 1,
+ExtResource("4_cchest"): 1
+})
+gold = 50
+
+[resource]
+script = ExtResource("8_cchest")
+once = true
+actions = Array[ExtResource("1_cchest")]([SubResource("Resource_loot")])
+used_icon = ExtResource("7_cchest")
+id = &"cave_chest"
+display_name = "Mossy Chest"
+description = "A chest left in the dark, furred with moss."
+icon = ExtResource("6_cchest")

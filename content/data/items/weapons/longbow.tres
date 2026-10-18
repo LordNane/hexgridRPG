@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/shoot.tres" id="1_vo00x"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/longbow.png" id="2_ergw3"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="3_uuvdg"]
+[ext_resource type="Script" path="res://content/defs/weapon_def.gd" id="4_1n850"]
+
+[sub_resource type="Resource" id="Resource_c8vlv"]
+script = ExtResource("3_uuvdg")
+value = 4.0
+
+[resource]
+script = ExtResource("4_1n850")
+attack = ExtResource("1_vo00x")
+two_handed = true
+slot = 0
+equip_tag = &"bow"
+modifiers = Array[ExtResource("3_uuvdg")]([SubResource("Resource_c8vlv")])
+price = 200
+id = &"longbow"
+display_name = "Longbow"
+description = "A tall bow that needs both hands."
+icon = ExtResource("2_ergw3")

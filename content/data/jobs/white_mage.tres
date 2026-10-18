@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="JobDef" format=3]
+
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="1_pixpx"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/cure.tres" id="2_3vliq"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/protect.tres" id="3_qgddu"]
+[ext_resource type="Resource" path="res://content/data/abilities/white_mage/regenerator.tres" id="4_nkqa1"]
+[ext_resource type="Script" path="res://content/defs/job_def.gd" id="5_khmtb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/jobs/white_mage.png" id="6_rjerv"]
+[ext_resource type="Resource" path="res://content/data/abilities/weapons/punch.tres" id="7_3vliq"]
+[ext_resource type="Script" path="res://content/conditions/condition.gd" id="7_v3cid"]
+
+[resource]
+script = ExtResource("5_khmtb")
+command_name = "White Magic"
+stat_multipliers = Dictionary[int, int]({
+0: 85,
+1: 130,
+2: 70,
+3: 80,
+4: 110,
+5: 120,
+6: 100
+})
+stat_growth = Dictionary[int, float]({
+0: 3.0,
+1: 1.5,
+2: 0.2,
+3: 0.3,
+4: 0.5,
+5: 0.6,
+6: 0.1
+})
+move = 3
+equip_tags = Array[StringName]([&"staff", &"hat", &"robe"])
+unarmed_attack = ExtResource("7_3vliq")
+abilities = Dictionary[ExtResource("1_pixpx"), int]({
+ExtResource("2_3vliq"): 50,
+ExtResource("3_qgddu"): 70,
+ExtResource("4_nkqa1"): 300
+})
+sprite = ExtResource("6_rjerv")
+id = &"white_mage"
+display_name = "White Mage"
+description = "Heals and shields allies with white magic."

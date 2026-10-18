@@ -6,5 +6,6 @@
 script = ExtResource("1_47ji0")
 extra_move_cost = 1.0
 sight_bonus = 1
+battle_arenas = Array[String](["res://battle/arenas/forest_clearing.tscn"])
 id = &"hills"
 display_name = "Hills"

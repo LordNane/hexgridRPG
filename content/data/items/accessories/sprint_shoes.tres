@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/placeholder/items/sprint_shoes.png" id="1_xja8d"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_h5gow"]
+[ext_resource type="Script" path="res://content/defs/equipment_def.gd" id="3_uiwx1"]
+
+[sub_resource type="Resource" id="Resource_xp10n"]
+script = ExtResource("2_h5gow")
+stat = 7
+value = 1.0
+
+[resource]
+script = ExtResource("3_uiwx1")
+slot = 4
+modifiers = Array[ExtResource("2_h5gow")]([SubResource("Resource_xp10n")])
+price = 500
+id = &"sprint_shoes"
+display_name = "Sprint Shoes"
+description = "Light boots for long strides."
+icon = ExtResource("1_xja8d")

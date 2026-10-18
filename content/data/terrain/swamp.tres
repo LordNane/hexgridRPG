@@ -5,5 +5,7 @@
 [resource]
 script = ExtResource("1_bhugt")
 move_cost = 2.0
+battle_move_cost = 2
+battle_arenas = Array[String](["res://battle/arenas/forest_clearing.tscn"])
 id = &"swamp"
 display_name = "Swamp"

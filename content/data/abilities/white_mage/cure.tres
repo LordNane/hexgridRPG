@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityDef" format=3]
+
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="1_yg3b0"]
+[ext_resource type="Script" path="res://content/defs/ability_def.gd" id="2_dnscw"]
+
+[resource]
+script = ExtResource("2_dnscw")
+mp_cost = 6
+id = &"cure"
+display_name = "Cure"
+description = "Restore HP to allies in a small area."

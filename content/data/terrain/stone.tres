@@ -5,5 +5,6 @@
 [resource]
 script = ExtResource("1_oiy12")
 move_cost = 1.5
+battle_arenas = Array[String](["res://battle/arenas/forest_clearing.tscn"])
 id = &"stone"
 display_name = "Rocky Ground"

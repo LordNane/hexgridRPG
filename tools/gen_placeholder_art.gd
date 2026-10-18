@@ -9,10 +9,12 @@ extends SceneTree
 ## - cliff_faces.png    one elevation level of cliff per terrain (rows), aligned with the top faces
 ## - height_digits.png  hex tops labelled 0–9, for painting arena heights
 ## - features.png       forest, hills and mountains (rows) standing on a hex, in 2 variants (columns)
+## - props.png          battle props: a tree and a rock (rows) standing on a hex, in 2 variants
 ## - regions.png        translucent tints for painting regions
 ## - fog.png            fog over unexplored hexes, then fog over remembered ones
 ## - preview_x4.png     a small stacked arena at 4× zoom, to judge the hex size and elevation step
-## and to res://assets/sprites/placeholder/: party_token.png and poi/<name>.png icons.
+## and to res://assets/sprites/placeholder/: party_token.png, poi/<name>.png icons, jobs/<job>.png
+## figures and items/<item>.png icons.
 
 const TILESET_DIR := "res://assets/tilesets/placeholder/"
 const SPRITE_DIR := "res://assets/sprites/placeholder/"
@@ -30,10 +32,16 @@ const TERRAINS := {
 	"water": [Color("3a6ab0"), Color("2a4c80")],
 	"snow": [Color("dfe6ee"), Color("9fb0c0")],
 	"swamp": [Color("4f6a3c"), Color("3c3a2a")],
+	"cave_wall": [Color("4a4452"), Color("2e2a34")],
 }
 
 ## Feature rows in features.png.
 const FEATURES: Array[String] = ["forest", "hills", "mountains"]
+## Prop rows in props.png.
+const PROPS: Array[String] = ["tree", "rock"]
+
+## Jobs with a figure in jobs/.
+const JOBS: Array[String] = ["squire", "archer", "white_mage", "black_mage"]
 
 const REGION_TINTS: Array[Color] = [
 	Color("ff6a5a"), Color("5ab0ff"), Color("7aff6a"), Color("ffd84a"), Color("c87aff"), Color("5affe0")]
@@ -58,15 +66,31 @@ func _init() -> void:
 	_add_terrain_sheets(outputs)
 	outputs[TILESET_DIR + "height_digits.png"] = _height_digits()
 	outputs[TILESET_DIR + "features.png"] = _feature_sheet()
+	outputs[TILESET_DIR + "props.png"] = _prop_sheet()
 	outputs[TILESET_DIR + "regions.png"] = _region_sheet()
 	outputs[TILESET_DIR + "fog.png"] = _fog_sheet()
 	outputs[SPRITE_DIR + "party_token.png"] = _party_token()
 	var icons: Dictionary[String, Callable] = {
 		"chest": _icon_chest.bind(false), "chest_open": _icon_chest.bind(true), "shrine": _icon_shrine,
 		"stones": _icon_stones, "sign": _icon_sign, "cave": _icon_cave, "tower": _icon_tower,
+		"exit": _icon_exit,
 	}
 	for icon_name: String in icons:
 		outputs[SPRITE_DIR + "poi/%s.png" % icon_name] = icons[icon_name].call()
+	for job: String in JOBS:
+		outputs[SPRITE_DIR + "jobs/%s.png" % job] = _job_sprite(job)
+	var item_icons: Dictionary[String, Callable] = {
+		"potion": _icon_flask.bind(Color("d0403a")), "ether": _icon_flask.bind(Color("4a7ae0")),
+		"antidote": _icon_flask.bind(Color("5ab04a")), "phoenix_down": _icon_feather,
+		"bronze_sword": _icon_sword.bind(Color("c8904a"), 8), "iron_sword": _icon_sword.bind(Color("c8d0dc"), 9),
+		"dagger": _icon_sword.bind(Color("b8c0cc"), 5), "longbow": _icon_bow,
+		"oak_staff": _icon_stick.bind(Color("9a6a3a"), Color("f0f0e0")), "ash_rod": _icon_stick.bind(Color("4a4048"), Color("e0503a")),
+		"buckler": _icon_shield, "leather_cap": _icon_cap, "pointed_hat": _icon_pointed_hat,
+		"leather_vest": _icon_garment.bind(Color("8a5a3a"), false), "cotton_robe": _icon_garment.bind(Color("d8d0c0"), true),
+		"sprint_shoes": _icon_boot, "guard_ring": _icon_ring,
+	}
+	for icon_name: String in item_icons:
+		outputs[SPRITE_DIR + "items/%s.png" % icon_name] = item_icons[icon_name].call()
 	var failures := 0
 	for path: String in outputs:
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
@@ -275,6 +299,45 @@ func _paint_hills(image: Image, variant: int) -> void:
 		_fill_ellipse(image, center - Vector2(radius.x * 0.3, radius.y * 0.35), radius * 0.45, Color("a8b86a"), center.y)
 
 
+## Battle props stand on one hex: like features, each tile is a hex wide and two tall.
+func _prop_sheet() -> Image:
+	var size := Vector2i(_cell.x, _cell.y * 2)
+	var sheet := Image.create_empty(size.x * FEATURE_VARIANTS, size.y * PROPS.size(), false, Image.FORMAT_RGBA8)
+	var painters: Array[Callable] = [_paint_tree, _paint_rock]
+	for row: int in PROPS.size():
+		for variant: int in FEATURE_VARIANTS:
+			var tile := Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
+			painters[row].call(tile, variant)
+			_outline(tile, OUTLINE)
+			_blit(sheet, tile, Vector2i(variant * size.x, row * size.y))
+	return sheet
+
+
+## One tall tree with its trunk on the hex center: a pine, or a round leafy tree.
+func _paint_tree(image: Image, variant: int) -> void:
+	_fill_rect(image, Rect2i(15, 18, 3, 7), Color("5a3a24"))
+	_fill_rect(image, Rect2i(15, 18, 1, 7), Color("7a5236"))
+	if variant == 0:
+		for tier: int in 3:
+			var top := Vector2(16.5, 1 + tier * 6)
+			var base_y := 11.0 + tier * 6
+			var half := 5.0 + tier * 2
+			_fill_triangle(image, top, Vector2(16.5 - half, base_y), Vector2(17 + half, base_y), Color("2e6b34"))
+			_fill_triangle(image, top, Vector2(16.5 - half, base_y), Vector2(16.5, base_y), Color("4a9a4a"))
+	else:
+		_fill_ellipse(image, Vector2(16.5, 11), Vector2(9, 8.5), Color("3f7f3a"))
+		_fill_ellipse(image, Vector2(13.5, 8), Vector2(4.5, 3.5), Color("62a852"))
+		_fill_ellipse(image, Vector2(19.5, 14), Vector2(3, 2.5), Color("2f6630"))
+
+
+func _paint_rock(image: Image, variant: int) -> void:
+	var center := Vector2(16, 22) if variant == 0 else Vector2(15, 23)
+	var radius := Vector2(9, 7) if variant == 0 else Vector2(11, 5.5)
+	_fill_ellipse(image, center, radius, Color("74747f"), center.y + 3.0)
+	_fill_ellipse(image, center - Vector2(radius.x * 0.3, radius.y * 0.35), radius * 0.5, Color("9a9aa6"), center.y + 3.0)
+	_fill_ellipse(image, center + Vector2(radius.x * 0.4, radius.y * 0.2), radius * 0.3, Color("5e5e68"), center.y + 3.0)
+
+
 func _paint_mountains(image: Image, variant: int) -> void:
 	# Each peak is (apex x, apex y, half the base width), listed back to front.
 	var peaks: Array[Vector3] = [Vector3(16, 3, 13)]
@@ -385,6 +448,15 @@ func _icon_cave() -> Image:
 	return _finish_icon(image)
 
 
+## A cave mouth seen from inside: daylight through the rock.
+func _icon_exit() -> Image:
+	var image := _icon()
+	_fill_ellipse(image, Vector2(8, 13), Vector2(7.5, 9), Color("5a5664"), 13.5)
+	_fill_ellipse(image, Vector2(8.5, 13.5), Vector2(3.5, 5), Color("f6e9b2"), 13.5)
+	_fill_ellipse(image, Vector2(8.5, 14), Vector2(2, 3), Color("fffbe6"), 13.5)
+	return _finish_icon(image)
+
+
 func _icon_tower() -> Image:
 	var image := _icon()
 	_fill_rect(image, Rect2i(4, 4, 8, 10), Color("9a9aa6"))
@@ -393,6 +465,186 @@ func _icon_tower() -> Image:
 		_fill_rect(image, Rect2i(x, 2, 2, 2), Color("9a9aa6"))
 	_fill_rect(image, Rect2i(7, 6, 2, 3), Color("2a2a34"))
 	_fill_rect(image, Rect2i(6, 10, 4, 4), Color("5a3a24"))
+	return _finish_icon(image)
+
+
+## A figure in a job's colors, the same size and footing as the party token.
+func _job_sprite(job: String) -> Image:
+	var image := Image.create_empty(16, 24, false, Image.FORMAT_RGBA8)
+	var skin := Color("f0c8a0")
+	match job:
+		"squire":
+			_paint_tunic(image, Color("4a6ab0"), Color("3a3048"))
+			_fill_rect(image, Rect2i(4, 14, 9, 1), Color("6a4a2a"))
+			_paint_face(image, skin, Color("2a2030"))
+			_fill_rect(image, Rect2i(6, 3, 5, 2), Color("8a5a2a"))
+			_fill_rect(image, Rect2i(6, 4, 1, 2), Color("8a5a2a"))
+		"archer":
+			_paint_tunic(image, Color("3f7a3a"), Color("4a3a2a"))
+			_fill_rect(image, Rect2i(12, 7, 1, 7), Color("7a5a30"))
+			_paint_face(image, skin, Color("2a2030"))
+			_fill_rect(image, Rect2i(5, 2, 7, 2), Color("2f6a2a"))
+			_fill_rect(image, Rect2i(5, 4, 1, 5), Color("2f6a2a"))
+			_fill_rect(image, Rect2i(11, 4, 1, 5), Color("2f6a2a"))
+		"white_mage":
+			_paint_robe(image, Color("e6e6ee"))
+			for x: int in range(4, 13, 2):
+				image.set_pixel(x, 21, Color("c83a3a"))
+				image.set_pixel(x + 1, 20, Color("c83a3a"))
+			_paint_face(image, skin, Color("2a2030"))
+			_fill_rect(image, Rect2i(5, 2, 7, 2), Color("d6d6e0"))
+			_fill_rect(image, Rect2i(5, 4, 1, 5), Color("d6d6e0"))
+			_fill_rect(image, Rect2i(11, 4, 1, 5), Color("d6d6e0"))
+			image.set_pixel(5, 1, Color("d6d6e0"))
+			image.set_pixel(11, 1, Color("d6d6e0"))
+		"black_mage":
+			_paint_robe(image, Color("3a4a9a"))
+			_paint_face(image, Color("1a1a2a"), Color("ffd84a"))
+			_fill_triangle(image, Vector2(8.5, 0), Vector2(4, 5), Vector2(13, 5), Color("9a8450"))
+			_fill_rect(image, Rect2i(2, 5, 13, 1), Color("9a8450"))
+			_fill_rect(image, Rect2i(3, 4, 11, 1), Color("b8a068"))
+	_outline(image, OUTLINE)
+	_fill_ellipse(image, Vector2(8.5, 22.5), Vector2(5, 1.6), Color(0, 0, 0, 0.35), 99.0, true)
+	return image
+
+
+## Legs and a tunic, lit from the left.
+func _paint_tunic(image: Image, cloth: Color, legs: Color) -> void:
+	_fill_rect(image, Rect2i(6, 17, 2, 5), legs)
+	_fill_rect(image, Rect2i(9, 17, 2, 5), legs)
+	for y: int in range(9, 18):
+		var inset := 1 if y < 12 else 0
+		_fill_rect(image, Rect2i(4 + inset, y, 9 - inset * 2, 1), cloth)
+		_fill_rect(image, Rect2i(4 + inset, y, 2, 1), cloth.lightened(0.2))
+
+
+## A robe down to the ground, flaring at the hem.
+func _paint_robe(image: Image, cloth: Color) -> void:
+	for y: int in range(9, 22):
+		var inset := 1 if y < 12 else (0 if y < 18 else -1)
+		_fill_rect(image, Rect2i(4 + inset, y, 9 - inset * 2, 1), cloth)
+		_fill_rect(image, Rect2i(4 + inset, y, 2, 1), cloth.lightened(0.2))
+
+
+func _paint_face(image: Image, skin: Color, eyes: Color) -> void:
+	_fill_rect(image, Rect2i(6, 4, 5, 5), skin)
+	image.set_pixel(7, 6, eyes)
+	image.set_pixel(9, 6, eyes)
+
+
+# --- Item icons -------------------------------------------------------------------------------
+
+
+## A round flask of colored liquid with a cork.
+func _icon_flask(liquid: Color) -> Image:
+	var image := _icon()
+	_fill_ellipse(image, Vector2(8, 10), Vector2(5, 4.5), Color("cfe6f0"))
+	_fill_ellipse(image, Vector2(8, 10.5), Vector2(4, 3.5), liquid)
+	_fill_rect(image, Rect2i(5, 7, 6, 2), Color("cfe6f0"))
+	_fill_rect(image, Rect2i(7, 3, 2, 4), Color("cfe6f0"))
+	_fill_rect(image, Rect2i(7, 2, 2, 1), Color("8a5a2e"))
+	image.set_pixel(6, 9, Color.WHITE)
+	return _finish_icon(image)
+
+
+func _icon_feather() -> Image:
+	var image := _icon()
+	for i: int in range(2, 10):
+		var at := Vector2i(12 - i, 3 + i)
+		var vane := Color("e0503a") if i % 3 else Color("f0a040")
+		_fill_rect(image, Rect2i(at.x - 1, at.y - 2, 2, 2), vane)
+		_fill_rect(image, Rect2i(at.x + 1, at.y, 2, 2), vane)
+	_line(image, Vector2i(13, 2), Vector2i(3, 12), Color("fff0d0"))
+	return _finish_icon(image)
+
+
+## A blade pointing up and right with a crossguard; [param length] is the blade's length.
+func _icon_sword(blade: Color, length: int) -> Image:
+	var image := _icon()
+	var base := Vector2i(5, 10)
+	var tip := base + Vector2i(length, -length)
+	_line(image, base, tip, blade)
+	_line(image, base + Vector2i(1, 0), tip + Vector2i(0, 1), blade.darkened(0.3))
+	_line(image, Vector2i(3, 8), Vector2i(7, 12), Color("e8c040"))
+	_line(image, Vector2i(4, 11), Vector2i(2, 13), Color("6a4020"))
+	return _finish_icon(image)
+
+
+func _icon_bow() -> Image:
+	var image := _icon()
+	for y: int in range(1, 15):
+		var t := (y - 7.5) / 7.0
+		var x := 10 - roundi(6.0 * sqrt(maxf(0.0, 1.0 - t * t)))
+		_fill_rect(image, Rect2i(x, y, 2, 1), Color("8a5a2e"))
+	_line(image, Vector2i(10, 1), Vector2i(10, 14), Color("e0e0d0"))
+	return _finish_icon(image)
+
+
+## A staff or rod: a stick with an ornament at the top.
+func _icon_stick(wood: Color, ornament: Color) -> Image:
+	var image := _icon()
+	_line(image, Vector2i(11, 4), Vector2i(3, 14), wood)
+	_line(image, Vector2i(12, 4), Vector2i(4, 14), wood.darkened(0.25))
+	_fill_ellipse(image, Vector2(12.5, 3.5), Vector2(2.5, 2.5), ornament)
+	image.set_pixel(12, 2, Color.WHITE)
+	return _finish_icon(image)
+
+
+func _icon_shield() -> Image:
+	var image := _icon()
+	_fill_ellipse(image, Vector2(8, 8), Vector2(6.5, 6.5), Color("7a8090"))
+	_fill_ellipse(image, Vector2(8, 8), Vector2(5, 5), Color("8a5a2e"))
+	_fill_ellipse(image, Vector2(8, 8), Vector2(1.8, 1.8), Color("e8c040"))
+	return _finish_icon(image)
+
+
+func _icon_cap() -> Image:
+	var image := _icon()
+	_fill_ellipse(image, Vector2(8, 11), Vector2(6, 6), Color("8a5a3a"), 11.0)
+	_fill_ellipse(image, Vector2(6, 8), Vector2(2, 2), Color("a8744a"), 11.0)
+	_fill_rect(image, Rect2i(1, 11, 14, 2), Color("6a4028"))
+	return _finish_icon(image)
+
+
+func _icon_pointed_hat() -> Image:
+	var image := _icon()
+	_fill_triangle(image, Vector2(9, 0), Vector2(4, 11), Vector2(13, 11), Color("9a8450"))
+	_fill_triangle(image, Vector2(9, 0), Vector2(4, 11), Vector2(8, 11), Color("b8a068"))
+	_fill_ellipse(image, Vector2(8, 12), Vector2(7.5, 1.8), Color("8a7440"))
+	return _finish_icon(image)
+
+
+## A sleeveless vest, or with [param long] a robe with sleeves.
+func _icon_garment(cloth: Color, long: bool) -> Image:
+	var image := _icon()
+	var bottom := 15 if long else 13
+	for y: int in range(3, bottom):
+		var flare := maxi(0, y - 11) if long else 0
+		_fill_rect(image, Rect2i(4 - flare, y, 8 + flare * 2, 1), cloth)
+	if long:
+		_fill_rect(image, Rect2i(1, 4, 3, 6), cloth.darkened(0.1))
+		_fill_rect(image, Rect2i(12, 4, 3, 6), cloth.darkened(0.1))
+	_fill_rect(image, Rect2i(4, 3, 2, bottom - 3), cloth.lightened(0.15))
+	_fill_rect(image, Rect2i(7, 3, 2, 3), Color(0, 0, 0, 0))
+	return _finish_icon(image)
+
+
+func _icon_boot() -> Image:
+	var image := _icon()
+	_fill_rect(image, Rect2i(5, 3, 5, 8), Color("3a7ab0"))
+	_fill_rect(image, Rect2i(5, 10, 9, 3), Color("3a7ab0"))
+	_fill_rect(image, Rect2i(5, 12, 9, 1), Color("2a3a50"))
+	_fill_rect(image, Rect2i(5, 3, 5, 1), Color("f0f0f0"))
+	_fill_triangle(image, Vector2(5, 5), Vector2(1, 3), Vector2(2, 8), Color("f0f0f0"))
+	return _finish_icon(image)
+
+
+func _icon_ring() -> Image:
+	var image := _icon()
+	_fill_ellipse(image, Vector2(8, 9.5), Vector2(5, 5), Color("e8c040"))
+	_fill_ellipse(image, Vector2(8, 9.5), Vector2(3, 3), Color(0, 0, 0, 0))
+	_fill_ellipse(image, Vector2(8, 4.5), Vector2(2.2, 2.2), Color("4a9ae0"))
+	image.set_pixel(7, 4, Color.WHITE)
 	return _finish_icon(image)
 
 
@@ -449,6 +701,15 @@ func _outline(image: Image, color: Color) -> void:
 				if Rect2i(Vector2i.ZERO, image.get_size()).has_point(n) and source.get_pixelv(n).a > 0.5:
 					image.set_pixel(x, y, color)
 					break
+
+
+## A one-pixel line from [param from] to [param to], both ends included.
+func _line(image: Image, from: Vector2i, to: Vector2i, color: Color) -> void:
+	var steps := maxi(absi(to.x - from.x), absi(to.y - from.y))
+	for i: int in steps + 1:
+		var at := Vector2i(Vector2(from).lerp(Vector2(to), float(i) / maxf(1.0, steps)).round())
+		if Rect2i(Vector2i.ZERO, image.get_size()).has_point(at):
+			image.set_pixelv(at, color)
 
 
 func _blit(target: Image, source: Image, at: Vector2i) -> void:

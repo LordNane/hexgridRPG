@@ -10,10 +10,13 @@ class_name FeatureDef extends Def
 @export var blocks_sight := false
 ## Extra vision range while standing here, like the view from hills.
 @export var sight_bonus := 0
+## Arenas for random battles here. They take the place of the terrain's.
+@export_file("*.tscn") var battle_arenas: Array[String] = []
 
 
 func validate() -> PackedStringArray:
 	var problems := super()
 	if extra_move_cost < 0.0:
 		problems.append("extra_move_cost can't be negative")
+	problems.append_array(TerrainDef.arena_problems(battle_arenas))
 	return problems

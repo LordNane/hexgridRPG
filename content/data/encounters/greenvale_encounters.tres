@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EncounterTable" format=3]
+
+[ext_resource type="Script" path="res://content/defs/encounter_def.gd" id="1_gt52u"]
+[ext_resource type="Resource" path="res://content/data/encounters/bandit_patrol.tres" id="2_q7xaa"]
+[ext_resource type="Resource" path="res://content/data/encounters/bandit_scouts.tres" id="3_0ltfo"]
+[ext_resource type="Script" path="res://content/defs/encounter_table.gd" id="4_1kut3"]
+
+[resource]
+script = ExtResource("4_1kut3")
+chance_per_step = 0.12
+encounters = Dictionary[ExtResource("1_gt52u"), int]({
+ExtResource("2_q7xaa"): 3,
+ExtResource("3_0ltfo"): 1
+})
+id = &"greenvale_encounters"
+display_name = "Greenvale Encounters"
+description = "Bandits on the roads of Greenvale and the Thornwood."
